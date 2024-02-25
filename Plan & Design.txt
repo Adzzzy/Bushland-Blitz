@@ -1,0 +1,112 @@
+Object Oriented Programming – Project Planning
+Description:
+Bushland Blitz a short turn-based combat game based in the Australian Outback.
+Classes contain – an enemy, a player, and moves
+User interface using ncurses – for main menu and navigating moves.
+As moved get learnt then get concatenated to a dynamic array.
+
+Plan:
+Week 1
+-	Work on classes and interaction between classes – create base skeleton and functions for each class
+o	Jonasz – Enemies – also rough interface
+o	Adam – Moves Class
+o	Billy – Player Class
+-	Interactions between objects refined – ie how enemys interact with the player, and moves interact the player, etc.
+-	Other work
+o	Jonasz – interface and menu for fighting using ncurses
+
+Week 2 –
+-	Adam - Work on game difficulties
+-	Jonasz - Work on randomly generated enemies
+-	Billy / Adam – Work on Item Class
+-	Add additional states and behaviours to classes – generally make the game more interesting
+
+Work out bugs and error as they appear
+
+Game Outline:
+-	Main menu – start game – settings – exit game
+-	Start game -> Enter your name -> lore / story displays on screen
+-	At start and between each enemy some text saying ‘enemy approaches’
+-	Start with two basic moves, boomerang throw, club strike
+-	Learn a new move every 5 enemies, you learn a new one. IF we have enough time, choose from 3 moves.
+-	FOR CURRENT MODE: 5 different enemies, unlock 2 moves.
+-	Interface displays health and spirit, and separate little menu for moves.
+-	Fighting is turn based, choose a move with arrow pointer using arrow keys and press enter to use it
+
+General Notes
+
+Early enemies – Green Snake, spider, scorpion (Gives poison debuff), Eagle (swoops)
+Order for now – green snake, spider, scorpion, brown snake , eagle – learn move after scorpion.
+Stronger enemies - Brown Snake, Dingo (Attacks twice each turn), Crocodile (Attacks once every few turns, does lot of damage), shark (scary), Black mamba (little gatekeeper boss)
+Bosses – Rainbow serpent
+Player – Base 100 Hp, Base Spirit 25 (mana type thing), Attacks: Strike (10 damage), Spell: Heal (Heals 50% hp, 10 spirit cost)
+Green Snake – 20hp Bites (10 damage)
+-	Difficulties, decides how many enemies to fight in total to win the game
+-	The enemy which spawns is determined from a pool of enemies which can spawn, the pool changes to have harder enemies to choose from at later fights. E.g. fight 0-5 has a pool of relatively easy enemies then fight 6-10 chooses from a pool of much harder enemies. Higher difficulties have more fights, so harder pools as well.
+-	Turn-based and the player will usually move first
+-	Unique enemy traits, a type of enemy which may be able to occasionally attack twice in a row. Slow enemy which does not attack each turn but unleashes a very strong attack when it does.
+-	Status ailments for player such as speed boost which allows them to attack twice, or a poison de-buff which damages them each turn.
+-	Certain enemies may drop certain items as rewards (cure to poison, speed booster, damage booster, max hp booster, spirit booster). Items take a turn to use and must be used mid-battle.
+-	Enemy class has virtual method named ‘attack’, a generic attack for all enemies, parameter is a string – name of move and int – damage of move. Each enemy has specific, name and damage function in enemy.cpp etc. specific unique attacks go in method of each subclass.
+-	Boomerang club and spear require no spirit, later you learn moves that do
+-	Work out how to do dymaic array of players move list
+
+ - EASY ENEMIES MOVES -
+
+Green Snake
+    - Chomp
+    - Strangle
+    - Slithery Slap
+Echnida
+    - QuillShot
+    - Spike
+    - Spiny Charge
+Kangaroo
+    - Kick
+    - Punch
+    - Tail Slam
+Scorpion
+    - Pincer Pinch
+    - Poison Skewer (No DAMAGE poisons the player, then player takes 10 damage every turn until cleanse is used)
+    - Sting
+Spider
+    - WebShot
+    - Poison Bite (NO DAMAGE poisons the player, then player takes 10 damage every turn until cleanse is used)
+    - Crazy Crawl
+Koala
+    -Sleep (heals a bit)
+    -Claw Swipe
+    -Bear Hug
+
+ - HARD ENEMIES MOVES -
+
+Brown Snake
+    - Lethal Lunge (15 DAMAGE and poisons the player, then player takes 10 damage every turn until cleanse is used
+    - Strangle
+    - Slithery Slap
+
+Blue Ringed Octopus
+    - Paralyzing Hold (10 Damage Player can't move next turn)
+    - Venomous Munch  (15 Damage and poisons the player, then player takes 10 damage every turn until cleanse is used
+    - Wacky Wrap
+
+Shark
+    - Cutting Crunch (15 damage and Bleed effect (Take 15 damage at the end of the turn for 2 turns then it goes away))
+    - Savage Tackle
+    - Fin Lunge
+
+Dingo (120 hp)
+    - Wound Lick (60hp heal)
+    - Dog Dive
+    -Chomp
+Crocodile (200hp)
+    - Death Roll (20 Damage and paralysed for next turn)
+    - Rapid Rush (25 damage)
+    - Croc Crunch (20 Damage)
+
+Wedge Tailed Eagle (100hp)
+    - Talon Swipe
+    - Sky Dive (Charges for 1 turn then big damage)
+    -
+
+Rainbow serpent final boss
