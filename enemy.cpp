@@ -11,6 +11,7 @@ enemy::enemy() {
 	int health = 100;
 	name = "NULL";
 	std::string effect = "NULL";
+	std::string effect2 = "NULL";
 	bool alive = true;
 
 }

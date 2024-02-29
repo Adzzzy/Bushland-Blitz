@@ -5,3 +5,4 @@ main_menu.o
 main.o
 moves.o
 player.o
+.vscode/settings.json

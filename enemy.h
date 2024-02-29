@@ -15,7 +15,8 @@ public:
 	enemy();
 
 	int health;
-	std::string effect;
+	std::string effect; //for non-volatile effects, e.g. burn
+	std::string effect2; //for volatile effects, e.g. sluggish
 	bool alive;
 	std::string name;
 

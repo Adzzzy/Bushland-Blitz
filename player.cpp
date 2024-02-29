@@ -20,6 +20,7 @@ player::player()
     name = "NULL";
     enemiesDefeated = 0;
     effect = "NULL";
+    effect2 = "NULL";
     learnt_attacks = { new std::string[0] };
     learnt_spells = { new std::string[0] };
     gained_items = { new std::string[0] };
@@ -103,6 +104,10 @@ std::string player::attack(moves pattack, enemy *badFellow){
         increaseHealth(50);
         return "You used " + pattack.name + ", which healed you for 50 health";
     }
+    else if (pattack.effect == "FullHeal") {
+        increaseHealth(max_health);
+        return "You used " + pattack.name + ", fully restoring your health";
+    }
     else if (pattack.effect == "Cleanse") {
         effect = "NULL";
         return "You used " + pattack.name + ", cleansing you of all ill effects";
@@ -110,9 +115,17 @@ std::string player::attack(moves pattack, enemy *badFellow){
     else if (pattack.effect == "Burn") {
         badFellow->effect = "burn";
         int tempHealth = badFellow->getHealth();
-    	tempHealth = tempHealth - 5;
+    	tempHealth = tempHealth - pattack.damage;
     	badFellow->setHealth(tempHealth);
-        return "You used " + pattack.name + ", dealing 5 damage and burning the " + badFellow->name + " for 10 damage every turn";
+        player_turn = false;
+        return "You used " + pattack.name + ", dealing " + std::to_string(pattack.damage) + " damage and burning the " + badFellow->name + " for 10 damage every turn";
+    }
+    else if (pattack.effect == "Sluggish") {
+        effect2 = "sluggish";
+        int tempHealth = badFellow->getHealth();
+    	tempHealth = tempHealth - pattack.damage;
+    	badFellow->setHealth(tempHealth);
+        return "You used " + pattack.name + ", dealing " + std::to_string(pattack.damage) + " damage";
     }
 
     else {
@@ -127,19 +140,7 @@ std::string player::attack(moves pattack, enemy *badFellow){
     		return "You tried using " + pattack.name + ", but it missed!";
     	}
     }
-    // moves heal(100, 0, 10, "WeakHeal", "Heal");
-    // //Cleanse gets rid of poison status (and others if they are added)
-    // moves cleanse(100, 0, 10, "Cleanse", "Cleanse");
-    // //Does five damage and burns enemy for 10 damage at the end of each turn
-    // moves flame_of_wala(100, 5, 20, "Burn", "Flame of Wala");
-    // //StrongHeal effect heals 50hp
-    // moves elder_heal(100, 0, 30, "StrongHeal", "Elder Heal");
-    // //Good spell for damage
-    // moves nargun_fist(100, 40, 20, "NULL","Nargun's Fist");
-    // //FullHeal effect heals health to full
-    // moves rainbow_restoration(100, 0, 50, "FullHeal", "Rainbow Restoration");
-    // //Big damage spell needs lots of spirit
-    // moves wrath_of_wambeen(100, 75, 60, "NULL", "Wambeen's Wrath");
+    
 	return "Error - Player Attack";
 }
 
@@ -288,6 +289,8 @@ std::string player::use_item(items pitem) {
     else if (pitem.name == "Desert Lime") {updateMaxSpirit(10); lose_item(pitem.name); return "You ate the Desert Lime. Your max spirit increased by 10";}
     else if (pitem.name == "Wild Orange") {effect = "NULL"; lose_item(pitem.name); return "You ate the Wild Orange. You were cured of any ailments";}
     else if (pitem.name == "Witchetty Grub") {increaseHealth(100); lose_item(pitem.name); return "You ate the Witchetty Grub. It healed you for 100 health";}
+
+    return "Error - use_item";
 }
 
 player::~player() {

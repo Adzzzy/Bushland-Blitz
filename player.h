@@ -54,7 +54,8 @@ public:
     int spirit_regen;
     std::string name;
     int enemiesDefeated;
-    std::string effect;
+    std::string effect; //for non-volatile effects, e.g. poison
+    std::string effect2; //for volatile effects, e.g. sluggish
 
     void getName(std::string p_name);
 

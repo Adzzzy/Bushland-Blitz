@@ -345,8 +345,6 @@ int game() {
     // while loop of entire game
     while(player.player_death == false) {
 
-    if (player.player_turn == true) { // players turn
-
     if (encounterMessage == true) {
 
         green_snake *gs = new green_snake();
@@ -408,6 +406,9 @@ int game() {
     }
 
     ch = getch();
+
+    if (player.player_turn == true) { // players turn
+
         switch (ch) // main switch statement
         {
             hoverAttack(player, *enemy, currentMessage);
@@ -631,17 +632,31 @@ int game() {
                                     currentMessage = player.attack(elder_heal, enemy);
                                     player.decreaseSpirit(elder_heal.spiritCost);
                                 }
+                            } else if (player.learnt_spells[highlightedOption] == "Nargun's Fist") {
+                                if (nargun_fist.spiritCost > player.getSpirit()) {
+                                    currentMessage = "Not enough spirit for that move";
+                                    playerTurn = true;
+                                } else {
+                                    currentMessage = player.attack(nargun_fist, enemy);
+                                    player.decreaseSpirit(nargun_fist.spiritCost);
+                                }
+                            } else if (player.learnt_spells[highlightedOption] == "Rainbow Restoration") {
+                                if (rainbow_restoration.spiritCost > player.getSpirit()) {
+                                    currentMessage = "Not enough spirit for that move";
+                                    playerTurn = true;
+                                } else {
+                                    currentMessage = player.attack(rainbow_restoration, enemy);
+                                    player.decreaseSpirit(rainbow_restoration.spiritCost);
+                                }
+                            } else if (player.learnt_spells[highlightedOption] == "Wambeen's Wrath") {
+                                if (wrath_of_wambeen.spiritCost > player.getSpirit()) {
+                                    currentMessage = "Not enough spirit for that move";
+                                    playerTurn = true;
+                                } else {
+                                    currentMessage = player.attack(wrath_of_wambeen, enemy);
+                                    player.decreaseSpirit(wrath_of_wambeen.spiritCost);
+                                }
                             }
-                            
-
-    // //StrongHeal effect heals 50hp
-    // moves elder_heal(100, 0, 30, "StrongHeal", "Elder Heal");
-    // //Good spell for damage
-    // moves nargun_fist(100, 40, 20, "NULL","Nargun's Fist");
-    // //FullHeal effect heals health to full
-    // moves rainbow_restoration(100, 0, 50, "FullHeal", "Rainbow Restoration");
-    // //Big damage spell needs lots of spirit
-    // moves wrath_of_wambeen(100, 75, 60, "NULL", "Wambeen's Wrath");
 
                             highlightedOption = 1;
                             selectedMenu = 1;
@@ -708,7 +723,7 @@ int game() {
     }
         else if (player.player_turn == false) { // on enemies turn
 
-            if (player.effect != "NULL" && effectMessage == true) { // checks if player has a status effect
+            if (player.effect != "NULL" && effectMessage == true && enemy->health != 0) { // checks if player has a status effect
                     if (player.effect == "poison") {
                         player.decreaseHealth(10);
                         currentMessage = "You're poisoned! You take 10 damage";
@@ -736,6 +751,7 @@ int game() {
                 currentMessage = "You defeated the " + enemies[player.enemiesDefeated] + "!";
                 hoverPause(player, *enemy, currentMessage);
                 player.effect = "NULL";
+                player.effect2 = "NULL";
                 usleep(1500000);
                 rNum2 = rand() % 5;
                     switch (rNum2) {
@@ -771,13 +787,27 @@ int game() {
                 effectMessage = true;
                 enemyEffectMessage = true;
             }
-            else { // enemy dosent die
+            else { // enemy doesnt die
                 currentMessage = enemy->attack(&player); // attacks the player
                 //Ensure health doesn't display as negative
                 if (player.health < 0) {
                     player.setHealth(0);
                 }
-                hoverAttack(player, *enemy, currentMessage);
+                if (player.effect2 != "sluggish") {
+                    hoverAttack(player, *enemy, currentMessage);
+                }
+                else {
+                    hoverPause(player, *enemy, currentMessage);
+                }
+
+                if (player.effect2 == "sluggish") {
+                    ok_screen = true; //This line causes the enemy to attack again, because pressing enter while this is true changes it to the enemy's turn
+                    currentMessage = "You're feeling sluggish and can't seem to move";
+                    usleep(1500000);
+                    hoverOK(player, *enemy, currentMessage);
+                    player.effect2 = "NULL";
+                }
+
                 player.checkDeath();
                 enemy->checkDeath();
                 player.player_turn = true;
@@ -798,5 +828,3 @@ int game() {
     return 0;
 
 }
-
-
