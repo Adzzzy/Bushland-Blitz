@@ -189,7 +189,7 @@ std::string spider::attack(player *player1) {
 				}
 			}
 			else {
-				return "Spider tried using Poison Skewer, but it missed!";
+				return "Spider tried using Poison Bite, but it missed!";
 			}
 			break;
 	}
@@ -368,32 +368,129 @@ koala::~koala() {
 
 }
 
-// // brown_snake
-// brown_snake::brown_snake() {
-// 	health = 30;
-// 	name = "Brown Snake";
-// }
+// brown_snake
+brown_snake::brown_snake() {
+	health = 100;
+	name = "Brown Snake";
+}
 
-// std::string brown_snake::attack(player *player1) {
+std::string brown_snake::attack(player *player1) {
+	int rNum = rand() % 101;
+	int rNum2 = rand() % 3;
+	float multiplier = float(player1->enemiesDefeated+1) / 10 + 1; //wave enemies defeated would be 9 by the time wave 2 starts so add 1 for a clean 2 times multiplier
+	switch (rNum2) {
+		case 0:
+			if (player1->effect != "poison") {
+				if (rNum < 80)	{
+					int tempHealth = player1->getHealth();
+					tempHealth = tempHealth - 20 * multiplier;
+					player1->setHealth(tempHealth);
+					player1->effect = "poison";
+					return "Brown Snake used Lethal Lunge, dealing " + std::to_string(int(20 * multiplier)) + " damage and leaving you poisoned";
+				}
+				else {
+					return "Brown Snake tried using Lethal Lunge, but it missed!";
+				}
+			}
+			else {
+				int tempHealth = player1->getHealth();
+				tempHealth = tempHealth - 10 * multiplier;
+				player1->setHealth(tempHealth);
+				return "Brown Snake used Chomp, dealing " + std::to_string(int(10 * multiplier)) + " damage";
+			}
+			break;
+		case 1:
+			if (rNum < 90)	{
+				int tempHealth = player1->getHealth();
+				tempHealth = tempHealth - 15 * multiplier;
+				player1->setHealth(tempHealth);
+				return "Brown Snake used Strangle, dealing " + std::to_string(int(15 * multiplier)) + " damage";
+			}
+			else {
+				return "Brown Snake tried using Strangle, but it missed!";
+			}
+			break;
+		case 2:
+			if (rNum < 70)	{
+				int tempHealth = player1->getHealth();
+				tempHealth = tempHealth - 25 * multiplier;
+				player1->setHealth(tempHealth);
+				return "Brown Snake used Slithery Slap, dealing " + std::to_string(int(25 * multiplier)) + " damage";
+			}
+			else {
+				return "Brown Snake tried using Slithery Slap, but it missed!";
+			}
+			break;
+	}
+	return "Error Failed Attack";
+}
 
-// }
+brown_snake::~brown_snake() {
 
-// brown_snake::~brown_snake() {
+}
 
-// }
-// // blue_ringed_octopus
-// blue_ringed_octopus::blue_ringed_octopus() {
-// 	health = 30;
-// 	name = "Green Snake";
-// }
+//blue_ringed_octopus
+blue_ringed_octopus::blue_ringed_octopus() {
+	health = 80;
+	name = "Blue-ringed Octopus";
+}
 
-// std::string blue_ringed_octopus::attack(player *player1) {
+std::string blue_ringed_octopus::attack(player *player1) {
+	int rNum = rand() % 101;
+	int rNum2 = rand() % 3;
+	float multiplier = float(player1->enemiesDefeated+1) / 10 + 1; //wave enemies defeated would be 9 by the time wave 2 starts so add 1 for a clean 2 times multiplier
 
-// }
+	switch (rNum2) {
+		case 0:
+			if (player1->effect2 != "sluggish") {
+				if (rNum < 70)	{
+					int tempHealth = player1->getHealth();
+					tempHealth = tempHealth - 20 * multiplier;
+					player1->setHealth(tempHealth);
+					player1->effect2 = "sluggish";
+					return "Blue-ringed Octopus used Paralyzing Hold, dealing " + std::to_string(int(20 * multiplier)) + " damage and leaving you unable to move";
+				}
+				else {
+					return "Blue-ringed Octopus tried using Paralyzing Hold, but it missed!";
+				}
+			}
+			else {
+				int tempHealth = player1->getHealth();
+				tempHealth = tempHealth - 10 * multiplier;
+				player1->setHealth(tempHealth);
+				return "Blue-ringed Octopus used Wacky Wrap, dealing " + std::to_string(int(10 * multiplier)) + " damage";
+			}
+			break;
+		case 1:
+			if (rNum > 80) {
+				int tempHealth = player1->getHealth();
+				tempHealth = tempHealth - 10 * multiplier;
+				player1->setHealth(tempHealth);
+				player1->effect = "poison";
+				return "Blue-ringed Octopus used Poisonous Peck, dealing " + std::to_string(int(10 * multiplier)) + " damage and poisoning you";
+			}
+			else {
+				return "Blue-ringed Octopus tried using Poisonous Peck, but it missed!";
+			}
+			break;
+		case 2:
+			if (rNum > 90) {
+				int tempHealth = player1->getHealth();
+				tempHealth = tempHealth - 20 * multiplier;
+				player1->setHealth(tempHealth);
+				return "Blue-ringed Octopus used Savage Suction, dealing " + std::to_string(int(20 * multiplier)) + " damage";
+			}
+			else {
+				return "Blue-ringed Octopus tried using Savage Suction, but it missed!";
+			}
+			break;
+	}
+	return "Error Failed Attack";
+}
 
-// blue_ringed_octopus::~blue_ringed_octopus() {
+blue_ringed_octopus::~blue_ringed_octopus() {
 
-// }
+}
 
 // // dingo
 // dingo::dingo() {

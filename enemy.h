@@ -81,21 +81,21 @@ public:
 	~koala();
 };
 
-// class brown_snake : public enemy {
-// public:
-// 	brown_snake();
-// 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
+class brown_snake : public enemy {
+public:
+	brown_snake();
+	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
 
-// 	~brown_snake();
-// };
+ 	~brown_snake();
+};
 
-// class blue_ringed_octopus : public enemy {
-// public:
-// 	blue_ringed_octopus();
-// 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
+class blue_ringed_octopus : public enemy {
+public:
+	blue_ringed_octopus();
+	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
 
-// 	~blue_ringed_octopus();
-// };
+	~blue_ringed_octopus();
+};
 
 // class dingo : public enemy {
 // public:

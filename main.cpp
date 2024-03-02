@@ -239,9 +239,9 @@ int game() {
     items witchetty_grub("Witchetty Grub");
 
     // other variables created here
-    std::string *enemies{ new std::string[18] }; // 18 enemies for now, allocate space depending on difficulty later
+    std::string *enemies{ new std::string[19] }; // 19 enemies for now, allocate space depending on difficulty later
     std::string currentMessage; // what outputs to the user, usually declarations of moves and items, etc
-    int numberOfEnemies = 18; // stores total number of enemies
+    int numberOfEnemies = 18; // stores total number of enemies (not including rainbow serpent)
     int rNum, rNum2;
     srand(time(NULL));
 
@@ -269,7 +269,7 @@ int game() {
         }
     }
 
-    enemies[numberOfEnemies-1] = "Rainbow Serpent";
+    enemies[numberOfEnemies] = "Rainbow Serpent";
 
     std::string current_enemy = enemies[0]; // displays what enemy is currently being fought
 
@@ -804,7 +804,7 @@ int game() {
 
                 if (player.effect2 == "sluggish") {
                     ok_screen = true; //This line causes the enemy to attack again, because pressing enter while this is true changes it to the enemy's turn
-                    currentMessage = "You're feeling sluggish and can't seem to move";
+                    currentMessage = "You try to move but don't have the strength";
                     usleep(1500000);
                     hoverOK(player, *enemy, currentMessage);
                     player.effect2 = "NULL";
