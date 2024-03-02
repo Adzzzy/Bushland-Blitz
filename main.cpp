@@ -312,8 +312,8 @@ int game() {
 
     // prompts user for character name and stores into into player object
     std::cout << "Please enter your characters name: ";
-    std::string player_name;
-    std::cin >> player_name;
+    char player_name[50];
+    std::cin.getline(player_name,50);
     player.getName(player_name);
 
     // initilize the ncurses window
@@ -408,12 +408,10 @@ int game() {
     ch = getch();
 
     if (player.player_turn == true) { // players turn
-
         switch (ch) // main switch statement
         {
-            hoverAttack(player, *enemy, currentMessage);
-            refresh();
             case KEY_LEFT:
+            if (ok_screen != true) {
                 switch(selectedMenu) // checks which menu your in
                 {
                     case 1:
@@ -473,7 +471,9 @@ int game() {
                         break;
                 }
                 break;
+            }
             case KEY_RIGHT:
+            if (ok_screen != true) {
                 switch(selectedMenu) // checks which menu you're in
                 {
                     case 1:
@@ -533,6 +533,7 @@ int game() {
                         break;
                 }
                 break;
+            }
             case 10: // on return press
                 if (ok_screen == true) {
                     if (playerTurn == true) {player.player_turn = true; playerTurn = false;}
@@ -623,6 +624,7 @@ int game() {
                                 } else {
                                     currentMessage = player.attack(flame_of_wala, enemy);
                                     player.decreaseSpirit(flame_of_wala.spiritCost);
+                                    enemyEffectMessage = false; //Enemy won't take burn damage until the turn after the move is used
                                 }
                             } else if (player.learnt_spells[highlightedOption] == "Elder Heal") {
                                 if (elder_heal.spiritCost > player.getSpirit()) {

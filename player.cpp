@@ -117,7 +117,6 @@ std::string player::attack(moves pattack, enemy *badFellow){
         int tempHealth = badFellow->getHealth();
     	tempHealth = tempHealth - pattack.damage;
     	badFellow->setHealth(tempHealth);
-        player_turn = false;
         return "You used " + pattack.name + ", dealing " + std::to_string(pattack.damage) + " damage and burning the " + badFellow->name + " for 10 damage every turn";
     }
     else if (pattack.effect == "Sluggish") {
