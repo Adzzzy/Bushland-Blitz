@@ -636,58 +636,340 @@ blue_ringed_octopus::~blue_ringed_octopus() {
 
 }
 
-// // dingo
-// dingo::dingo() {
-// 	health = 30;
-// 	name = "Green Snake";
-// }
+// dingo
+dingo::dingo() {
+	health = 100;
+	name = "Dingo";
+}
 
-// std::string dingo::attack(player *player1) {
+//dingo will always attack twice
+std::string dingo::attack(player *player1) {
+	int rNum = rand() % 101;
+	int rNum2 = rand() % 3;
+	int damage = 0;
+	int heal = 0;
+	float multiplier = float(player1->enemiesDefeated+1) / 10 + 1; //wave enemies defeated would be 9 by the time wave 2 starts so add 1 for a clean 2 times multiplier
+	switch (rNum2) {
+		case 0:
+			if (rNum < 100)	{
+				if (health <= 50) {
+					heal = 10 * multiplier;
+					health = health + heal;
+					return "Dingo used Wound Lick, healing itself for " + std::to_string(heal) + " health";
+				}
+				else {
+					int tempHealth = player1->getHealth();
+					if (player1->block == true) {
+						damage = 10 * multiplier * player1->blockReduction;
+						player1->setHealth(tempHealth-damage);
+						return "Dingo used Chomp, dealing a reduced " + std::to_string(damage) + " damage";
+					}
+					damage = 10 * multiplier;
+					player1->setHealth(tempHealth-damage);
+					return "Dingo used Chomp, dealing " + std::to_string(damage) + " damage";
+				}
+			}
+			else {
+				return "Dingo tried licking its wounds, but it failed!";
+			}
+			break;
+		case 1:
+			if (rNum < 100)	{
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 10 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Dingo used Chomp, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 10 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Dingo used Chomp, dealing " + std::to_string(damage) + " damage";
+			}
+			else {
+				return "Dingo tried using Chomp, but it missed!";
+			}
+			break;
+		case 2:
+			if (rNum < 80)	{
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 15 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Dingo used Dog Dive, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 15 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Dingo used Dog Dive, dealing " + std::to_string(damage) + " damage";
+			}
+			else {
+				return "Dingo tried using Dog Dive, but it missed!";
+			}
+			break;
+	}
+	return "Error Failed Attack";
+}
 
-// }
+dingo::~dingo() {
 
-// dingo::~dingo() {
+}
 
-// }
+// crocodile
+crocodile::crocodile() {
+	health = 130;
+	name = "Crocodile";
+	charging = false;
+}
 
-// // crocodile
-// crocodile::crocodile() {
-// 	health = 30;
-// 	name = "Green Snake";
-// }
+std::string crocodile::attack(player *player1) {
+	int rNum = rand() % 101;
+	int rNum2 = rand() % 3;
+	int damage = 0;
+	float multiplier = float(player1->enemiesDefeated+1) / 10 + 1; //wave enemies defeated would be 9 by the time wave 2 starts so add 1 for a clean 2 times multiplier
 
-// std::string crocodile::attack(player *player1) {
+	if (charging == true) {
+		charging = false;
+		if (rNum > 80) {
+			int tempHealth = player1->getHealth();
+			if (player1->block == true) {
+				damage = 40 * multiplier * player1->blockReduction;
+				player1->setHealth(tempHealth-damage);
+				return "Crocodile surges forward, slamming you to the ground, you manage to block some of its bites, sustaining " + std::to_string(damage) + " damage";
+			}
+			damage = 40 * multiplier;
+			player1->setHealth(tempHealth-damage);
+			return "Crocodile surges forward, slamming you to the ground and tearing into you with its teeth, dealing a colossal  " + std::to_string(damage) + " damage";
+			}
+		else {
+			return "Crocodile surges forward, missing you by a fraction";
+		}
+	}
 
-// }
+	switch (rNum2) {
+		case 0:
+			if (rNum > 100) {
+				charging = true;
+				return "Crocodile anchors itself, preparing to lunge";
+			}
+			else {
+				return "Crocodile sits motionless, eyeing you";
+			}
+			break;
+		case 1:
+			if (player1->effect2 != "sluggish") {
+				if (rNum < 70)	{
+					int tempHealth = player1->getHealth();
+					if (player1->block == true) {
+						damage = 20 * multiplier * player1->blockReduction;
+						player1->setHealth(tempHealth-damage);
+						player1->effect2 = "sluggish";
+						return "Crocodile grabbed you in a death roll, dealing a reduced " + std::to_string(damage) + " damage";
+					}
+					damage = 20 * multiplier;
+					player1->setHealth(tempHealth-damage);
+					player1->effect2 = "sluggish";
+					return "Crocodile grabbed you in a death roll, dealing " + std::to_string(damage) + " damage";
+				}
+				else {
+					return "Crocodile tried using Death Roll, but it missed!";
+				}
+			}
+			else {
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 15 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Crocodile used Croc Crunch, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 15 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Crocodile used Croc Crunch, dealing " + std::to_string(damage) + " damage";
+			}
+			break;
+		case 2:
+			if (rNum > 100) {
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 15 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Crocodile used Croc Crunch, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 15 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Crocodile used Croc Crunch, dealing " + std::to_string(damage) + " damage";
+			}
+			else {
+				return "Crocodile tried using Croc Crunch, but it missed!";
+			}
+			break;
+	}
+	return "Error Failed Attack";
+}
 
-// crocodile::~crocodile() {
+crocodile::~crocodile() {
 
-// }
+}
 
-// // wedge_tailed_eagle
-// wedge_tailed_eagle::wedge_tailed_eagle() {
-// 	health = 30;
-// 	name = "Green Snake";
-// }
+// wedge_tailed_eagle
+wedge_tailed_eagle::wedge_tailed_eagle() {
+	health = 100;
+	name = "Wedge-tailed Eagle";
+	charging = false;
+}
 
-// std::string wedge_tailed_eagle::attack(player *player1) {
+std::string wedge_tailed_eagle::attack(player *player1) {
+	int rNum = rand() % 101;
+	int rNum2 = rand() % 3;
+	int damage = 0;
+	float multiplier = float(player1->enemiesDefeated+1) / 10 + 1; //wave enemies defeated would be 9 by the time wave 2 starts so add 1 for a clean 2 times multiplier
 
-// }
+	if (charging == true) {
+		charging = false;
+		if (rNum > 80) {
+			int tempHealth = player1->getHealth();
+			if (player1->block == true) {
+				damage = 40 * multiplier * player1->blockReduction;
+				player1->setHealth(tempHealth-damage);
+				return "Wedge-tailed Eagle used Sky Dive, plummeting down onto you. You manage to block part of the attack, sustaining " + std::to_string(damage) + " damage";
+			}
+			damage = 40 * multiplier;
+			player1->setHealth(tempHealth-damage);
+			return "Wedge-tailed Eagle used Sky Dive, plummeting down onto you and dealing a whopping " + std::to_string(damage) + " damage";
+			}
+		else {
+			setHealth(health-10);
+			return "Wedge-tailed Eagle used Sky Dive, but narrowly misses you, barrelling into the ground. It takes 10 damage.";
+		}
+	}
 
-// wedge_tailed_eagle::~wedge_tailed_eagle() {
+	switch (rNum2) {
+		case 0:
+			if (rNum > 100) {
+				charging = true;
+				return "Wedge-Tailed Eagle flies high, lining you up in its sights";
+			}
+			else {
+				return "Wedge-Tailed Eagle pecks at the ground";
+			}
+			break;
+		case 1:
+			if (rNum < 90)	{
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 20 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Wedge-Tailed Eagle used Talon Swipe, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 20 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Wedge-Tailed Eagle used Talon Swipe, dealing " + std::to_string(damage) + " damage";
+			}
+			else {
+				return "Wedge-Tailed Eagle tried using Talon Swipe, but it missed!";
+			}
+			break;
+		case 2:
+			if (rNum > 100) {
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 10 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Wedge-tailed Eagle used Wing Whack, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 10 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Wedge-tailed Eagle used Wing Whack, dealing " + std::to_string(damage) + " damage";
+			}
+			else {
+				return "Wedge-tailed Eagle tried using Wing Whack, but it missed!";
+			}
+			break;
+	}
+	return "Error Failed Attack";
+}
 
-// }
+wedge_tailed_eagle::~wedge_tailed_eagle() {
 
-// // shark
-// shark::shark() {
-// 	health = 30;
-// 	name = "Green Snake";
-// }
+}
 
-// std::string shark::attack(player *player1) {
+// shark
+shark::shark() {
+	health = 120;
+	name = "Shark";
+}
 
-// }
+std::string shark::attack(player *player1) {
+	int rNum = rand() % 101;
+	int rNum2 = rand() % 3;
+	int damage = 0;
+	float multiplier = float(player1->enemiesDefeated+1) / 10 + 1; //wave enemies defeated would be 9 by the time wave 2 starts so add 1 for a clean 2 times multiplier
+	switch (rNum2) {
+		case 0:
+			if (effect2 != "swift") {
+				if (rNum < 80)	{
+					int tempHealth = player1->getHealth();
+					if (player1->block == true) {
+						damage = 10 * multiplier * player1->blockReduction;
+						player1->setHealth(tempHealth-damage);
+						effect2 = "swift";
+						return "Shark used Rapid Rush, dealing a reduced " + std::to_string(damage) + " damage and seizing the opportunity for another attack";
+					}
+					damage = 10 * multiplier;
+					player1->setHealth(tempHealth-damage);
+					effect2 = "swift";
+					return "Shark used Rapid Rush, dealing " + std::to_string(damage) + " damage and seizing the opportunity for another attack";
+				}
+				else {
+					return "Shark tried using Rapid Rush, but it missed!";
+				}
+			}
+			else {
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 10 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Shark used Fin Smack, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 10 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Shark used Fin Smack, dealing " + std::to_string(damage) + " damage";
+			}
+			break;
+		case 1:
+			if (rNum < 80)	{
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 15 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Shark used Cutting Crunch, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 15 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Shark used Cutting Crunch, dealing " + std::to_string(damage) + " damage";
+			}
+			else {
+				return "Shark tried using Cutting Crunch, but it missed!";
+			}
+			break;
+		case 2:
+			if (rNum < 100)	{
+				int tempHealth = player1->getHealth();
+				if (player1->block == true) {
+					damage = 10 * multiplier * player1->blockReduction;
+					player1->setHealth(tempHealth-damage);
+					return "Shark used Fin Smack, dealing a reduced " + std::to_string(damage) + " damage";
+				}
+				damage = 10 * multiplier;
+				player1->setHealth(tempHealth-damage);
+				return "Shark used Fin Smack dealing " + std::to_string(damage) + " damage";
+			}
+			else {
+				return "Shark tried using Fin Smack, but it missed!";
+			}
+			break;
+	}
+	return "Error Failed Attack";
+}
 
-// shark::~shark() {
+shark::~shark() {
 
-// }
+}

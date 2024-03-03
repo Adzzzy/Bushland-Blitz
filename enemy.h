@@ -97,37 +97,41 @@ public:
 	~blue_ringed_octopus();
 };
 
-// class dingo : public enemy {
-// public:
-// 	dingo();
-// 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
+class dingo : public enemy {
+	public:
+	dingo();
+	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
 
-// 	~dingo();
-// };
+	~dingo();
+};
 
-// class crocodile : public enemy {
-// public:
-// 	crocodile();
-// 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
+class crocodile : public enemy {
+public:
+	crocodile();
+	bool charging;
 
-// 	~crocodile();
-// };
+	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
 
-// class wedge_tailed_eagle : public enemy {
-// public:
-// 	wedge_tailed_eagle();
-// 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
+	~crocodile();
+};
 
-// 	~wedge_tailed_eagle();
-// };
+class wedge_tailed_eagle : public enemy {
+public:
+	wedge_tailed_eagle();
+	bool charging;
 
-// class shark : public enemy {
-// public:
-// 	shark();
-// 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
+	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
 
-// 	~shark();
-// };
+	~wedge_tailed_eagle();
+};
+
+class shark : public enemy {
+public:
+	shark();
+	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
+
+	~shark();
+};
 
 
 #endif

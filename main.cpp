@@ -247,25 +247,37 @@ int game() {
 
     for (int i=0; i < numberOfEnemies / 2; i++) { // randomly generates first half of easy enemies
         rNum = rand() % 6 + 1;
-        switch (rNum) {
-            case 1: if (enemies[i - 1] != "Green Snake") { enemies[i] = "Green Snake"; } else { enemies[i] = "Echidna"; }; break;
-            case 2: if (enemies[i - 1] != "Echidna") { enemies[i] = "Echidna"; } else { enemies[i] = "Kangaroo"; }; break;
-            case 3: if (enemies[i - 1] != "Kangaroo") { enemies[i] = "Kangaroo"; } else { enemies[i] = "Scorpion"; }; break;
-            case 4: if (enemies[i - 1] != "Scorpion") { enemies[i] = "Scorpion"; } else { enemies[i] = "Spider"; }; break;
-            case 5: if (enemies[i - 1] != "Spider") { enemies[i] = "Spider"; } else { enemies[i] = "Koala"; }; break;
-            case 6: if (enemies[i - 1] != "Koala") { enemies[i] = "Koala"; } else { enemies[i] = "Green Snake"; }; break;
+        if (i == 0) {
+            switch (rNum) {
+                case 1: enemies[i] = "Green Snake"; break;
+                case 2: enemies[i] = "Echidna"; break;
+                case 3: enemies[i] = "Kangaroo"; break;
+                case 4: enemies[i] = "Scorpion"; break;
+                case 5: enemies[i] = "Spider"; break;
+                case 6: enemies[i] = "Koala"; break;
+            }
+        }
+        else if (i != 0) {
+            switch (rNum) {
+                case 1: if (enemies[i - 1] != "Green Snake") { enemies[i] = "Green Snake"; } else { enemies[i] = "Echidna"; }; break;
+                case 2: if (enemies[i - 1] != "Echidna") { enemies[i] = "Echidna"; } else { enemies[i] = "Kangaroo"; }; break;
+                case 3: if (enemies[i - 1] != "Kangaroo") { enemies[i] = "Kangaroo"; } else { enemies[i] = "Scorpion"; }; break;
+                case 4: if (enemies[i - 1] != "Scorpion") { enemies[i] = "Scorpion"; } else { enemies[i] = "Spider"; }; break;
+                case 5: if (enemies[i - 1] != "Spider") { enemies[i] = "Spider"; } else { enemies[i] = "Koala"; }; break;
+                case 6: if (enemies[i - 1] != "Koala") { enemies[i] = "Koala"; } else { enemies[i] = "Green Snake"; }; break;
+            }
         }
     }
 
     for (int i=0; i < numberOfEnemies / 2; i++) { // randomly generates second half of harder enemies
         rNum = rand() % 6 + 1;
         switch (rNum) {
-            case 1: enemies[i + numberOfEnemies / 2] = "Brown Snake"; break;
-            case 2: enemies[i + numberOfEnemies / 2] = "Blue-ringed Octopus"; break;
-            case 3: enemies[i + numberOfEnemies / 2] = "Shark"; break;
-            case 4: enemies[i + numberOfEnemies / 2] = "Dingo"; break;
-            case 5: enemies[i + numberOfEnemies / 2] = "Crocodile"; break;
-            case 6: enemies[i + numberOfEnemies / 2] = "Wedge-tailed Eagle"; break;
+            case 1: if (enemies[(i + numberOfEnemies / 2)-1] != "Brown Snake") {enemies[i + numberOfEnemies / 2] = "Brown Snake"; } else { enemies[i + numberOfEnemies / 2] = "Blue-ringed Octopus"; }; break;
+            case 2: if (enemies[(i + numberOfEnemies / 2)-1] != "Blue-ringed Octopus") {enemies[i + numberOfEnemies / 2] = "Blue-ringed Octopus"; } else { enemies[i + numberOfEnemies / 2] = "Shark"; }; break;
+            case 3: if (enemies[(i + numberOfEnemies / 2)-1] != "Shark") {enemies[i + numberOfEnemies / 2] = "Shark"; } else { enemies[i + numberOfEnemies / 2] = "Dingo"; }; break;
+            case 4: if (enemies[(i + numberOfEnemies / 2)-1] != "Dingo") {enemies[i + numberOfEnemies / 2] = "Dingo"; } else { enemies[i + numberOfEnemies / 2] = "Crocodile"; }; break;
+            case 5: if (enemies[(i + numberOfEnemies / 2)-1] != "Crocodile") {enemies[i + numberOfEnemies / 2] = "Crocodile"; } else { enemies[i + numberOfEnemies / 2] = "Wedge-tailed Eagle"; }; break;
+            case 6: if (enemies[(i + numberOfEnemies / 2)-1] != "Wedge-tailed Eagle") {enemies[i + numberOfEnemies / 2] = "Wedge-tailed Eagle"; } else { enemies[i + numberOfEnemies / 2] = "Brown Snake"; }; break;
         }
     }
 
@@ -347,29 +359,42 @@ int game() {
 
     if (encounterMessage == true) {
 
-        green_snake *gs = new green_snake();
-        echidna *e = new echidna();
-        kangaroo *ka = new kangaroo();
-        scorpion *sc = new scorpion();
-        spider *sp = new spider();
-        koala *ko = new koala();
-
         if (firstEnemy == true) {firstEnemy = false;}
         else {player.enemiesDefeated = player.enemiesDefeated + 1;}
 
-        if (enemies[player.enemiesDefeated] == "Green Snake") {enemy = gs; delete e; delete ka; delete sc; delete sp; delete ko;}
-        else if (enemies[player.enemiesDefeated] == "Echidna") {enemy = e; delete gs; delete ka; delete sc; delete sp; delete ko;}
-        else if (enemies[player.enemiesDefeated] == "Kangaroo") {enemy = ka; delete gs; delete e; delete sc; delete sp; delete ko;}
-        else if (enemies[player.enemiesDefeated] == "Scorpion") {enemy = sc; delete gs; delete e; delete ka; delete sp; delete ko;}
-        else if (enemies[player.enemiesDefeated] == "Spider") {enemy = sp; delete gs; delete e; delete ka; delete sc; delete ko;}
-        else if (enemies[player.enemiesDefeated] == "Koala") {enemy = ko; delete gs; delete e; delete ka; delete sc; delete sp;}
+        //first 9 enemies will be one of this batch
+        if (player.enemiesDefeated < 9) {
+            green_snake *gs = new green_snake();
+            echidna *e = new echidna();
+            kangaroo *ka = new kangaroo();
+            scorpion *sc = new scorpion();
+            spider *sp = new spider();
+            koala *ko = new koala();
 
-        // else if (enemies[enemiesDefeated] == "Brown Snake") {brown_Snake bs; *enemy = &bs;}
-        // else if (enemies[enemiesDefeated] == "Blue-ringed Octopus") {blue_ringed_octopus bro; *enemy = &bro;}
-        // else if (enemies[enemiesDefeated] == "Shark") {shark sh; *enemy = &sh;}
-        // else if (enemies[enemiesDefeated] == "Dingo") {dingo d; *enemy = &d;}
-        // else if (enemies[enemiesDefeated] == "Crocodile") {crocodile c; *enemy = &c;}
-        // else if (enemies[enemiesDefeated] == "Wedge-tailed_Eagle") {wedge_tailed_eagle wte; *enemy = &wte;}
+            if (enemies[player.enemiesDefeated] == "Green Snake") {enemy = gs; delete e; delete ka; delete sc; delete sp; delete ko;}
+            else if (enemies[player.enemiesDefeated] == "Echidna") {enemy = e; delete gs; delete ka; delete sc; delete sp; delete ko;}
+            else if (enemies[player.enemiesDefeated] == "Kangaroo") {enemy = ka; delete gs; delete e; delete sc; delete sp; delete ko;}
+            else if (enemies[player.enemiesDefeated] == "Scorpion") {enemy = sc; delete gs; delete e; delete ka; delete sp; delete ko;}
+            else if (enemies[player.enemiesDefeated] == "Spider") {enemy = sp; delete gs; delete e; delete ka; delete sc; delete ko;}
+            else if (enemies[player.enemiesDefeated] == "Koala") {enemy = ko; delete gs; delete e; delete ka; delete sc; delete sp;}
+        }
+
+        //after the first batch of enemies and before the last batch, the enemies will be one of these
+        if (player.enemiesDefeated >= 9 && player.enemiesDefeated < 17) {
+            brown_snake *bs = new brown_snake();
+            blue_ringed_octopus *bro = new blue_ringed_octopus();
+            shark *sh = new shark();
+            dingo *d = new dingo();
+            crocodile *c = new crocodile();
+            wedge_tailed_eagle *wte = new wedge_tailed_eagle();
+
+            if (enemies[player.enemiesDefeated] == "Brown Snake") {enemy = bs; delete bro; delete sh; delete d; delete c; delete wte;}
+            else if (enemies[player.enemiesDefeated] == "Blue-ringed Octopus") {enemy = bro; delete bs; delete sh; delete d; delete c; delete wte;}
+            else if (enemies[player.enemiesDefeated] == "Shark") {enemy = sh; delete bs; delete  bro; delete d; delete c; delete wte;} 
+            else if (enemies[player.enemiesDefeated] == "Dingo") {enemy = d; delete bs; delete bro; delete sh; delete c; delete wte;}
+            else if (enemies[player.enemiesDefeated] == "Crocodile") {enemy = c; delete bs; delete bro; delete sh; delete d; delete wte;}
+            else if (enemies[player.enemiesDefeated] == "Wedge-tailed_Eagle") {enemy = wte; delete bs; delete bro; delete sh; delete d; delete c;}
+        }
 
     }
     
@@ -757,7 +782,13 @@ int game() {
                 player.effect = "NULL";
                 player.effect2 = "NULL";
                 usleep(1500000);
-                rNum2 = rand() % 5;
+                if (player.enemiesDefeated < 10) {
+                    //ensures Witchetty Grub isn't dropped in the first half of the game
+                    rNum2 = rand() % 5;
+                }
+                else {
+                    rNum2 = rand() % 6;
+                }
                     switch (rNum2) {
                         case 0:
                             player.gain_item("Yam");
@@ -798,6 +829,19 @@ int game() {
                 if (player.health < 0) {
                     player.setHealth(0);
                 }
+
+                //if the enemy is a dingo or if the enemy has a speed boost, it attacks twice
+                if (enemy->name == "Dingo" || enemy->effect2 == "swift") {
+                    enemy->effect2 = "NULL";
+                    hoverPause(player, *enemy, currentMessage);
+                    usleep(1500000);
+                    currentMessage = enemy->attack(&player); // attacks the player
+                    //Ensure health doesn't display as negative
+                    if (player.health < 0) {
+                        player.setHealth(0);
+                    }
+                }
+
                 if (player.effect2 != "sluggish") {
                     hoverAttack(player, *enemy, currentMessage);
                 }
