@@ -56,6 +56,8 @@ public:
     int enemiesDefeated;
     std::string effect; //for non-volatile effects, e.g. poison
     std::string effect2; //for volatile effects, e.g. sluggish
+    bool block; //for reducing damage if player is blocking
+    float blockReduction;
 
     void getName(std::string p_name);
 
@@ -78,8 +80,6 @@ public:
     void checkDeath();
 
     std::string attack(moves pattack, enemy *badFellow);
-    void block(int damage, int turn_count);
-    void wait(); // possibly unneeded
 
     ~player();
 };

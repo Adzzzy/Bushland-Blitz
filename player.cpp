@@ -21,6 +21,8 @@ player::player()
     enemiesDefeated = 0;
     effect = "NULL";
     effect2 = "NULL";
+    block = false;
+    blockReduction = 0.5;
     learnt_attacks = { new std::string[0] };
     learnt_spells = { new std::string[0] };
     gained_items = { new std::string[0] };
@@ -88,10 +90,6 @@ void player::updateMaxSpirit(int amount) {
     max_spirit += amount;
 }
 
-void player::block(int damage, int turn_count) {
-    // code here
-}
-
 std::string player::attack(moves pattack, enemy *badFellow){
 	int acc = pattack.getAccuracy();
 	int rNum = rand() % 100;
@@ -141,10 +139,6 @@ std::string player::attack(moves pattack, enemy *badFellow){
     }
     
 	return "Error - Player Attack";
-}
-
-void player::wait() {
-    player_turn = false; // set the players turn to completed
 }
 
 // get current health

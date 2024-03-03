@@ -21,7 +21,7 @@ void hoverAttack(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << "\r"<< std::endl;
     std::cout << "\r"<< std::endl;
     std::cout << " " << currentMessage << "\r"<< std::endl;
-    std::cout << " --> Attack     Spells     Items     Wait \r"<< std::endl;
+    std::cout << " --> Attack     Spells     Items     Guard \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
     std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
@@ -40,7 +40,7 @@ void hoverSpells(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << "\r"<< std::endl;
     std::cout << "\r"<< std::endl;
     std::cout << " " << currentMessage << "\r"<< std::endl;
-    std::cout << "     Attack --> Spells     Items     Wait \r"<< std::endl;
+    std::cout << "     Attack --> Spells     Items     Guard \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
     std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
@@ -59,12 +59,12 @@ void hoverItems(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << "\r"<< std::endl;
     std::cout << "\r"<< std::endl;
     std::cout << " " << currentMessage << "\r"<< std::endl;
-    std::cout << "     Attack     Spells --> Items     Wait \r"<< std::endl;
+    std::cout << "     Attack     Spells --> Items     Guard \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
     std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
-void hoverWait(player &player, enemy &enemy, std::string currentMessage) {
+void hoverGuard(player &player, enemy &enemy, std::string currentMessage) {
     clear_terminal();
     std::cout << "\r" << std::endl;
     std::cout << "  "<< enemy.name << " "; if (enemy.effect == "burn") { std::cout << "*Burnt*";}  std::cout << " Enemy Health: " << enemy.health << "\r"<< std::endl;
@@ -78,7 +78,7 @@ void hoverWait(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << "\r"<< std::endl;
     std::cout << "\r"<< std::endl;
     std::cout << " " << currentMessage << "\r"<< std::endl;
-    std::cout << "     Attack     Spells     Items --> Wait \r"<< std::endl;
+    std::cout << "     Attack     Spells     Items --> Guard \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
     std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
@@ -419,7 +419,7 @@ int game() {
                         {
                             case 1:
                             highlightedOption = 4;
-                            hoverWait(player, *enemy, currentMessage);
+                            hoverGuard(player, *enemy, currentMessage);
                                 break;
                             case 2:
                             highlightedOption--;
@@ -489,7 +489,7 @@ int game() {
                                 break;
                             case 3:
                             highlightedOption++;
-                            hoverWait(player, *enemy, currentMessage);
+                            hoverGuard(player, *enemy, currentMessage);
                                 break;
                             case 4:
                             highlightedOption = 1;
@@ -563,7 +563,10 @@ int game() {
                                 break;
                             case 4:
                                 highlightedOption = 1;
-                                player.player_turn = false;
+                                player.block = true;
+                                currentMessage = "You raise your arms to block incoming damage";
+                                hoverOK(player, *enemy, currentMessage);
+                                ok_screen = true;
                                 break;
                         }
                         break;
@@ -714,13 +717,12 @@ int game() {
                 }
             }
                 break;
+            //pressing escape or q takes the player back to the main menu
+            case 27 :
             case 'q':
-                // ends the program
-                endwin();
                 clear_terminal();
                 delete[] enemies;
                 return 0;
-                break;
         }
     }
         else if (player.player_turn == false) { // on enemies turn
@@ -785,6 +787,7 @@ int game() {
                 hoverPause(player, *enemy, currentMessage);
                 usleep(1500000);
                 encounterMessage = true;
+                player.block = false;
                 player.player_turn = true;
                 effectMessage = true;
                 enemyEffectMessage = true;
@@ -812,6 +815,7 @@ int game() {
 
                 player.checkDeath();
                 enemy->checkDeath();
+                player.block = false;
                 player.player_turn = true;
                 effectMessage = true;
                 enemyEffectMessage = true;
@@ -820,13 +824,12 @@ int game() {
         }
     }
     // player dies here
-    
+    delete[] enemies;
     usleep(1500000);
     clear_terminal();
-    endwin();
-    refresh();
     std::cout << " You died! \r" << std::endl;
-    delete[] enemies;
+    usleep(1500000);
+    clear_terminal();
     return 0;
 
 }

@@ -111,6 +111,11 @@ int main() {
 	                refresh();
                     endwin();
                     game();
+                    std::cout << "WELCOME TO BUSHLAND BLITZ \r" << std::endl;
+                    std::cout << " --> START GAME           \r" << std::endl;
+                    std::cout << "     SETTINGS             \r" << std::endl;
+                    std::cout << "     EXIT                 \r" << std::endl;
+                    break;
                 }
                 else if (highlightedOption == 2) {
                     // go to settings
@@ -121,6 +126,8 @@ int main() {
                     return 0;
                 }
                 break;
+            //escape key or q quits the program
+            case 27 :
             case 'q':
                 endwin();
                 return 0;
