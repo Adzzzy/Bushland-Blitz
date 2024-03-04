@@ -58,6 +58,7 @@ public:
     std::string effect2; //for volatile effects, e.g. sluggish
     bool block; //for reducing damage if player is blocking
     float blockReduction;
+    bool ailmentShield; //if ailment shield is true, the player won't get an ailment
 
     void getName(std::string p_name);
 

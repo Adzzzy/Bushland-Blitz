@@ -222,6 +222,10 @@ std::string spider::attack(player *player1) {
 		case 2:
 			if (rNum < 100)	{
 				if (player1->effect == "NULL") {
+					if (player1->ailmentShield == true) {
+						player1->ailmentShield = false;
+						return "Spider used Poison Bite. Your ailment shield protects you from getting poisoned and disappears";
+					}
 					player1->effect = "poison";
 					return "Spider used Poison Bite, which deals no damage but poisons you, dealing damage each turn";
 				}
@@ -296,6 +300,10 @@ std::string scorpion::attack(player *player1) {
 		case 2:
 			if (rNum < 100)	{
 				if (player1->effect == "NULL") {
+					if (player1->ailmentShield == true) {
+						player1->ailmentShield = false;
+						return "Scorpion used Poison Skewer. Your ailment shield protects you from getting poisoned and disappears";
+					}
 					player1->effect = "poison";
 					return "Scorpion used Poison Skewer, which deals no damage but poisons you, dealing damage each turn";
 				}
@@ -486,11 +494,21 @@ std::string brown_snake::attack(player *player1) {
 					if (player1->block == true) {
 						damage = 20 * multiplier * player1->blockReduction;
 						player1->setHealth(tempHealth-damage);
+						//if player has ailment shield, protect from poison
+						if (player1->ailmentShield == true) {
+							player1->ailmentShield = false;
+							return "Brown Snake used Lethal Lunge, dealing a reduced " + std::to_string(damage) + ". Your ailment shield protects you from getting poisoned and disappears";
+						}
 						player1->effect = "poison";
 						return "Brown Snake used Lethal Lunge, dealing a reduced " + std::to_string(damage) + " damage and leaving you poisoned";
 					}
 					damage = 20 * multiplier;
 					player1->setHealth(tempHealth-damage);
+					//if player has ailment shield, protect from poison
+					if (player1->ailmentShield == true) {
+						player1->ailmentShield = false;
+						return "Brown Snake used Lethal Lunge, dealing " + std::to_string(damage) + ". Your ailment shield protects you from getting poisoned and disappears";
+					}
 					player1->effect = "poison";
 					return "Brown Snake used Lethal Lunge, dealing " + std::to_string(damage) + " damage and leaving you poisoned";
 				}
@@ -570,11 +588,19 @@ std::string blue_ringed_octopus::attack(player *player1) {
 					if (player1->block == true) {
 						damage = 20 * multiplier * player1->blockReduction;
 						player1->setHealth(tempHealth-damage);
+						if (player1->ailmentShield == true) {
+							player1->ailmentShield = false;
+							return "Blue-ringed Octopus used Paralyzing Hold, dealing a reduced " + std::to_string(damage) + ". Your ailment shield protects you from getting trapped and disappears";
+						}
 						player1->effect2 = "sluggish";
 						return "Blue-ringed Octopus used Paralyzing Hold, dealing a reduced " + std::to_string(damage) + " damage and leaving you unable to move";
 					}
 					damage = 20 * multiplier;
 					player1->setHealth(tempHealth-damage);
+					if (player1->ailmentShield == true) {
+						player1->ailmentShield = false;
+						return "Blue-ringed Octopus used Paralyzing Hold, dealing " + std::to_string(damage) + ". Your ailment shield protects you from getting trapped and disappears";
+					}
 					player1->effect2 = "sluggish";
 					return "Blue-ringed Octopus used Paralyzing Hold, dealing " + std::to_string(damage) + " damage and leaving you unable to move";
 				}
@@ -595,16 +621,24 @@ std::string blue_ringed_octopus::attack(player *player1) {
 			}
 			break;
 		case 1:
-			if (rNum > 80) {
+			if (rNum < 80) {
 				int tempHealth = player1->getHealth();
 				if (player1->block == true) {
 					damage = 10 * multiplier * player1->blockReduction;
 					player1->setHealth(tempHealth-damage);
+					if (player1->ailmentShield == true) {
+						player1->ailmentShield = false;
+						return "Blue-ringed Octopus used Poisonous Peck, dealing a reduced " + std::to_string(damage) + ". Your ailment shield protects you from getting poisoned and disappears";
+					}
 					player1->effect = "poison";
 					return "Blue-ringed Octopus used Poisonous Peck, dealing a reduced " + std::to_string(damage) + " damage and poisoning you";
 				}
 				damage = 10 * multiplier;
 				player1->setHealth(tempHealth-damage);
+				if (player1->ailmentShield == true) {
+					player1->ailmentShield = false;
+					return "Blue-ringed Octopus used Poisonous Peck, dealing " + std::to_string(damage) + ". Your ailment shield protects you from getting poisoned and disappears";
+				}
 				player1->effect = "poison";
 				return "Blue-ringed Octopus used Poisonous Peck, dealing " + std::to_string(damage) + " damage and poisoning you";
 			}
@@ -613,7 +647,7 @@ std::string blue_ringed_octopus::attack(player *player1) {
 			}
 			break;
 		case 2:
-			if (rNum > 90) {
+			if (rNum < 90) {
 				int tempHealth = player1->getHealth();
 				if (player1->block == true) {
 					damage = 20 * multiplier * player1->blockReduction;
@@ -653,7 +687,7 @@ std::string dingo::attack(player *player1) {
 		case 0:
 			if (rNum < 100)	{
 				if (health <= 50) {
-					heal = 10 * multiplier;
+					heal = 5 * multiplier;
 					health = health + heal;
 					return "Dingo used Wound Lick, healing itself for " + std::to_string(heal) + " health";
 				}
@@ -728,12 +762,12 @@ std::string crocodile::attack(player *player1) {
 
 	if (charging == true) {
 		charging = false;
-		if (rNum > 80) {
+		if (rNum < 80) {
 			int tempHealth = player1->getHealth();
 			if (player1->block == true) {
 				damage = 40 * multiplier * player1->blockReduction;
 				player1->setHealth(tempHealth-damage);
-				return "Crocodile surges forward, slamming you to the ground, you manage to block some of its bites, sustaining " + std::to_string(damage) + " damage";
+				return "Crocodile surges forward, slamming you to the ground. You manage to block some of its bites, sustaining " + std::to_string(damage) + " damage";
 			}
 			damage = 40 * multiplier;
 			player1->setHealth(tempHealth-damage);
@@ -746,7 +780,7 @@ std::string crocodile::attack(player *player1) {
 
 	switch (rNum2) {
 		case 0:
-			if (rNum > 100) {
+			if (rNum < 100) {
 				charging = true;
 				return "Crocodile anchors itself, preparing to lunge";
 			}
@@ -761,11 +795,19 @@ std::string crocodile::attack(player *player1) {
 					if (player1->block == true) {
 						damage = 20 * multiplier * player1->blockReduction;
 						player1->setHealth(tempHealth-damage);
+						if (player1->ailmentShield == true) {
+							player1->ailmentShield = false;
+							return "Crocodile used Death Roll, dealing a reduced " + std::to_string(damage) + ". Your ailment shield protects you from getting trapped and disappears";
+						}
 						player1->effect2 = "sluggish";
 						return "Crocodile grabbed you in a death roll, dealing a reduced " + std::to_string(damage) + " damage";
 					}
 					damage = 20 * multiplier;
 					player1->setHealth(tempHealth-damage);
+					if (player1->ailmentShield == true) {
+						player1->ailmentShield = false;
+						return "Crocodile used Death Roll, dealing " + std::to_string(damage) + ". Your ailment shield protects you from getting trapped and disappears";
+					}
 					player1->effect2 = "sluggish";
 					return "Crocodile grabbed you in a death roll, dealing " + std::to_string(damage) + " damage";
 				}
@@ -786,7 +828,7 @@ std::string crocodile::attack(player *player1) {
 			}
 			break;
 		case 2:
-			if (rNum > 100) {
+			if (rNum < 100) {
 				int tempHealth = player1->getHealth();
 				if (player1->block == true) {
 					damage = 15 * multiplier * player1->blockReduction;
@@ -824,7 +866,7 @@ std::string wedge_tailed_eagle::attack(player *player1) {
 
 	if (charging == true) {
 		charging = false;
-		if (rNum > 80) {
+		if (rNum < 70) {
 			int tempHealth = player1->getHealth();
 			if (player1->block == true) {
 				damage = 40 * multiplier * player1->blockReduction;
@@ -833,7 +875,7 @@ std::string wedge_tailed_eagle::attack(player *player1) {
 			}
 			damage = 40 * multiplier;
 			player1->setHealth(tempHealth-damage);
-			return "Wedge-tailed Eagle used Sky Dive, plummeting down onto you and dealing a whopping " + std::to_string(damage) + " damage";
+			return "Wedge-tailed Eagle used Sky Dive, plummeting down onto you and dealing a monstrous " + std::to_string(damage) + " damage";
 			}
 		else {
 			setHealth(health-10);
@@ -843,7 +885,7 @@ std::string wedge_tailed_eagle::attack(player *player1) {
 
 	switch (rNum2) {
 		case 0:
-			if (rNum > 100) {
+			if (rNum < 100) {
 				charging = true;
 				return "Wedge-Tailed Eagle flies high, lining you up in its sights";
 			}
@@ -852,7 +894,7 @@ std::string wedge_tailed_eagle::attack(player *player1) {
 			}
 			break;
 		case 1:
-			if (rNum < 90)	{
+			if (rNum < 80)	{
 				int tempHealth = player1->getHealth();
 				if (player1->block == true) {
 					damage = 20 * multiplier * player1->blockReduction;
@@ -868,7 +910,7 @@ std::string wedge_tailed_eagle::attack(player *player1) {
 			}
 			break;
 		case 2:
-			if (rNum > 100) {
+			if (rNum < 100) {
 				int tempHealth = player1->getHealth();
 				if (player1->block == true) {
 					damage = 10 * multiplier * player1->blockReduction;
@@ -971,5 +1013,21 @@ std::string shark::attack(player *player1) {
 }
 
 shark::~shark() {
+
+}
+
+//rainbow_serpent
+rainbow_serpent::rainbow_serpent() {
+	health = 200;
+	name = "Rainbow Serpent";
+}
+
+std::string rainbow_serpent::attack(player *player1) {
+	//serpent strike
+
+	return "Error Failed Attack";
+}
+
+rainbow_serpent::~rainbow_serpent() {
 
 }

@@ -23,7 +23,7 @@ void hoverAttack(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << " " << currentMessage << "\r"<< std::endl;
     std::cout << " --> Attack     Spells     Items     Guard \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 void hoverSpells(player &player, enemy &enemy, std::string currentMessage) {
@@ -42,7 +42,7 @@ void hoverSpells(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << " " << currentMessage << "\r"<< std::endl;
     std::cout << "     Attack --> Spells     Items     Guard \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} else if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 void hoverItems(player &player, enemy &enemy, std::string currentMessage) {
@@ -61,7 +61,7 @@ void hoverItems(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << " " << currentMessage << "\r"<< std::endl;
     std::cout << "     Attack     Spells --> Items     Guard \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} else if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 void hoverGuard(player &player, enemy &enemy, std::string currentMessage) {
@@ -80,7 +80,7 @@ void hoverGuard(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << " " << currentMessage << "\r"<< std::endl;
     std::cout << "     Attack     Spells     Items --> Guard \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} else if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 void hoverAttack(player &player, enemy &enemy, int highlighted_option, std::string currentMessage) {
@@ -113,7 +113,7 @@ void hoverAttack(player &player, enemy &enemy, int highlighted_option, std::stri
         std::cout <<"     Back\r"<< std::endl;
     }
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} else if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 void hoverSpell(player &player, enemy &enemy, int highlighted_option, std::string currentMessage) {
@@ -148,7 +148,7 @@ void hoverSpell(player &player, enemy &enemy, int highlighted_option, std::strin
     }
     else { std::cout <<" You haven't learnt any spells --> Back\r"<< std::endl; }
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} else if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 void hoverItem(player &player, enemy &enemy, int highlighted_option, std::string currentMessage) {
@@ -183,7 +183,7 @@ void hoverItem(player &player, enemy &enemy, int highlighted_option, std::string
     }
     else { std::cout <<" You have no items --> Back\r"<< std::endl; }
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} else if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 void hoverOK(player &player, enemy &enemy, std::string currentMessage) {
@@ -202,7 +202,7 @@ void hoverOK(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << " " << currentMessage << "\r"<< std::endl;
     std::cout << " --> OK \r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "Poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} else if (player.effect == "Poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 void hoverPause(player &player, enemy &enemy, std::string currentMessage) {
@@ -221,7 +221,7 @@ void hoverPause(player &player, enemy &enemy, std::string currentMessage) {
     std::cout << "\r"<< std::endl;
     std::cout << " " << currentMessage << "\r"<< std::endl;
     std::cout << "                                          \r"<< std::endl;
-    std::cout << player.name << "  "; if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"          Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
+    std::cout << player.name << "  "; if (player.ailmentShield == true) { std::cout << "*Shielded*";} else if (player.effect == "poison") { std::cout << "*Poisoned*";} std::cout << "  Health = "<< player.getHealth() <<"/"<< player.getMaxHealth() <<"    Spirit = "<< player.getSpirit() <<"/"<< player.getMaxSpirit() <<" \r"<< std::endl;
 }
 
 
@@ -308,14 +308,14 @@ int game() {
     moves cleanse(100, 0, 10, "Cleanse", "Cleanse");
     //Does five damage and burns enemy for 10 damage at the end of each turn
     moves flame_of_wala(100, 5, 20, "Burn", "Flame of Wala");
-    //StrongHeal effect heals 50hp
-    moves elder_heal(100, 0, 30, "StrongHeal", "Elder Heal");
+    //StrongHeal effect heals 80hp
+    moves elder_heal(100, 0, 25, "StrongHeal", "Elder Heal");
     //Good spell for damage
-    moves nargun_fist(100, 40, 20, "NULL","Nargun's Fist");
+    moves nargun_fist(100, 50, 20, "NULL","Nargun's Fist");
     //FullHeal effect heals health to full
     moves rainbow_restoration(100, 0, 50, "FullHeal", "Rainbow Restoration");
     //Big damage spell needs lots of spirit
-    moves wrath_of_wambeen(100, 75, 60, "NULL", "Wambeen's Wrath");
+    moves wrath_of_wambeen(100, 80, 60, "Burn", "Wambeen's Wrath");
 
     // player starts with two moves and a spell learnt
     player.learn_attack("Club");
@@ -350,6 +350,8 @@ int game() {
     bool enemyEffectMessage = true;
     bool playerTurn = false;
     bool firstEnemy = true;
+    bool insufficientSpirit = false;
+    bool doubleAttack = false; //allows enemy to get burned again if it attacked twice
     //keep track of groups of moves learned so moves don't get learned several times.
     int moveGroup = 0;
 
@@ -380,7 +382,7 @@ int game() {
         }
 
         //after the first batch of enemies and before the last batch, the enemies will be one of these
-        if (player.enemiesDefeated >= 9 && player.enemiesDefeated < 17) {
+        if (player.enemiesDefeated >= 9 && player.enemiesDefeated < 18) {
             brown_snake *bs = new brown_snake();
             blue_ringed_octopus *bro = new blue_ringed_octopus();
             shark *sh = new shark();
@@ -393,7 +395,7 @@ int game() {
             else if (enemies[player.enemiesDefeated] == "Shark") {enemy = sh; delete bs; delete  bro; delete d; delete c; delete wte;} 
             else if (enemies[player.enemiesDefeated] == "Dingo") {enemy = d; delete bs; delete bro; delete sh; delete c; delete wte;}
             else if (enemies[player.enemiesDefeated] == "Crocodile") {enemy = c; delete bs; delete bro; delete sh; delete d; delete wte;}
-            else if (enemies[player.enemiesDefeated] == "Wedge-tailed_Eagle") {enemy = wte; delete bs; delete bro; delete sh; delete d; delete c;}
+            else if (enemies[player.enemiesDefeated] == "Wedge-tailed Eagle") {enemy = wte; delete bs; delete bro; delete sh; delete d; delete c;}
         }
 
     }
@@ -632,6 +634,7 @@ int game() {
                             if (player.learnt_spells[highlightedOption] == "Heal") {
                                 if (heal.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
+                                    insufficientSpirit = true;
                                     playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(heal, enemy);
@@ -640,6 +643,7 @@ int game() {
                             } else if (player.learnt_spells[highlightedOption] == "Cleanse") {
                                 if (cleanse.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
+                                    insufficientSpirit = true;
                                     playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(cleanse, enemy);
@@ -648,6 +652,7 @@ int game() {
                             } else if (player.learnt_spells[highlightedOption] == "Flame of Wala") {
                                 if (flame_of_wala.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
+                                    insufficientSpirit = true;
                                     playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(flame_of_wala, enemy);
@@ -657,6 +662,7 @@ int game() {
                             } else if (player.learnt_spells[highlightedOption] == "Elder Heal") {
                                 if (elder_heal.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
+                                    insufficientSpirit = true;
                                     playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(elder_heal, enemy);
@@ -665,6 +671,7 @@ int game() {
                             } else if (player.learnt_spells[highlightedOption] == "Nargun's Fist") {
                                 if (nargun_fist.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
+                                    insufficientSpirit = true;
                                     playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(nargun_fist, enemy);
@@ -673,6 +680,7 @@ int game() {
                             } else if (player.learnt_spells[highlightedOption] == "Rainbow Restoration") {
                                 if (rainbow_restoration.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
+                                    insufficientSpirit = true;
                                     playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(rainbow_restoration, enemy);
@@ -681,6 +689,7 @@ int game() {
                             } else if (player.learnt_spells[highlightedOption] == "Wambeen's Wrath") {
                                 if (wrath_of_wambeen.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
+                                    insufficientSpirit = true;
                                     playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(wrath_of_wambeen, enemy);
@@ -690,8 +699,13 @@ int game() {
 
                             highlightedOption = 1;
                             selectedMenu = 1;
-                            hoverOK(player, *enemy, currentMessage);
-                            ok_screen = true;
+                            if (!insufficientSpirit) {
+                                hoverOK(player, *enemy, currentMessage);
+                                ok_screen = true;
+                            }
+                            else {
+                                hoverAttack(player, *enemy, currentMessage);
+                            }
                         }
                         else if (highlightedOption == player.spells) {
                             highlightedOption = 1;
@@ -729,9 +743,8 @@ int game() {
                             }
                             highlightedOption = 1;
                             selectedMenu = 1;
-                            player.player_turn = false;
-                            hoverPause(player, *enemy, currentMessage);
-                            usleep(1500000);
+                            hoverOK(player, *enemy, currentMessage);
+                            ok_screen = true;
                         }
                         else if (highlightedOption == player.item) {
                             highlightedOption = 1;
@@ -825,6 +838,15 @@ int game() {
             }
             else { // enemy doesnt die
                 currentMessage = enemy->attack(&player); // attacks the player
+                //Dingo gets unique attack message to notify the player it will attack again
+                if (enemy->name == "Dingo") {
+                    if (currentMessage.back() != '!') {
+                        currentMessage = currentMessage + ". It seizes the opportunity for another attack.";
+                    }
+                    else {
+                        currentMessage = currentMessage + " It seizes the opportunity for another attack.";
+                    }
+                }
                 //Ensure health doesn't display as negative
                 if (player.health < 0) {
                     player.setHealth(0);
@@ -832,6 +854,7 @@ int game() {
 
                 //if the enemy is a dingo or if the enemy has a speed boost, it attacks twice
                 if (enemy->name == "Dingo" || enemy->effect2 == "swift") {
+                    doubleAttack = true;
                     enemy->effect2 = "NULL";
                     hoverPause(player, *enemy, currentMessage);
                     usleep(1500000);
@@ -857,6 +880,23 @@ int game() {
                     player.effect2 = "NULL";
                 }
 
+                //enemy moves again so check for burn damage a second time
+                if (doubleAttack == true) {
+                    if (enemy->effect != "NULL") { // checks if enemy has a non-volatile status effect
+                        if (enemy->effect == "burn") {
+                            enemy->health = enemy->health - 10;
+                            if (enemy->health < 1) { // when enemy dies
+                                enemy->health = 0;
+                            }
+                            currentMessage = "The " + enemy->name + " is burnt, and takes 10 damage";
+                            hoverPause(player, *enemy, currentMessage);
+                            enemyEffectMessage = false;
+                            usleep(1500000);
+                        }
+                    }
+                }
+
+                doubleAttack = false;
                 player.checkDeath();
                 enemy->checkDeath();
                 player.block = false;

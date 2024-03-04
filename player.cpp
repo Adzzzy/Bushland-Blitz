@@ -23,6 +23,7 @@ player::player()
     effect2 = "NULL";
     block = false;
     blockReduction = 0.5;
+    ailmentShield = false;
     learnt_attacks = { new std::string[0] };
     learnt_spells = { new std::string[0] };
     gained_items = { new std::string[0] };
@@ -93,10 +94,17 @@ void player::updateMaxSpirit(int amount) {
 std::string player::attack(moves pattack, enemy *badFellow){
 	int acc = pattack.getAccuracy();
 	int rNum = rand() % 100;
+    if (pattack.name == "Wambeen's Wrath") {
+        badFellow->effect = "burn";
+        int tempHealth = badFellow->getHealth();
+    	tempHealth = tempHealth - pattack.damage;
+    	badFellow->setHealth(tempHealth);
+        return "You summon Wambeen's Wrath, dealing a devastating " + std::to_string(pattack.damage) + " and burning the " + badFellow->name + " for 10 damage every turn";
+    }
 
     if (pattack.effect == "WeakHeal") {
-        increaseHealth(25);
-        return "You used " + pattack.name + ", which healed you for 25 health";
+        increaseHealth(30);
+        return "You used " + pattack.name + ", which healed you for 30 health";
     }
     else if (pattack.effect == "StrongHeal") {
         increaseHealth(80);
@@ -108,8 +116,13 @@ std::string player::attack(moves pattack, enemy *badFellow){
         return "You used " + pattack.name + ", fully restoring your health and removing all ailments";
     }
     else if (pattack.effect == "Cleanse") {
+        increaseHealth(20);
+        if (effect == "NULL") {
+            ailmentShield = true;
+            return "You used " + pattack.name + ", healing you for 20 health and granting you a shield against ailments";
+        }
         effect = "NULL";
-        return "You used " + pattack.name + ", cleansing you of all ill effects";
+        return "You used " + pattack.name + ", cleansing you of all ill effects and healing you for 20 health";
     }
     else if (pattack.effect == "Burn") {
         badFellow->effect = "burn";
@@ -119,10 +132,14 @@ std::string player::attack(moves pattack, enemy *badFellow){
         return "You used " + pattack.name + ", dealing " + std::to_string(pattack.damage) + " damage and burning the " + badFellow->name + " for 10 damage every turn";
     }
     else if (pattack.effect == "Sluggish") {
-        effect2 = "sluggish";
         int tempHealth = badFellow->getHealth();
     	tempHealth = tempHealth - pattack.damage;
     	badFellow->setHealth(tempHealth);
+        if (ailmentShield == true) {
+            ailmentShield = false;
+            return "You used " + pattack.name + ", dealing a whopping " + std::to_string(pattack.damage) + " damage. Your ailment shield prevents you from getting tired and gets used up";
+        }
+        effect2 = "sluggish";
         return "You used " + pattack.name + ", dealing a whopping " + std::to_string(pattack.damage) + " damage, but leaving you feeling drained";
     }
 
@@ -281,7 +298,7 @@ std::string player::use_item(items pitem) {
     else if (pitem.name == "Brush Berry") {increaseSpirit(50); lose_item(pitem.name); return "You ate the Brush Berry. It restored your spirit by 50";}
     else if (pitem.name == "Bush Tomato") {updateMaxHealth(10); increaseHealth(10); lose_item(pitem.name); return "You ate the Bush Tomato. Your max health increased by 10";}
     else if (pitem.name == "Desert Lime") {updateMaxSpirit(10); increaseSpirit(10); lose_item(pitem.name); return "You ate the Desert Lime. Your max spirit increased by 10";}
-    else if (pitem.name == "Wild Orange") {effect = "NULL"; lose_item(pitem.name); return "You ate the Wild Orange. You were cured of any ailments";}
+    else if (pitem.name == "Wild Orange") { if (effect == "NULL") {ailmentShield = true; increaseHealth(30); lose_item(pitem.name); return "You ate the Wild Orange. You are shielded against ailments and your health is restored by 30";} else { effect = "NULL"; increaseHealth(30); lose_item(pitem.name); return "You ate the Wild Orange. You were cured of any ailments and healed for 30 health";} }
     else if (pitem.name == "Witchetty Grub") {increaseHealth(150); lose_item(pitem.name); return "You ate the Witchetty Grub. It healed you for 150 health";}
 
     return "Error - use_item";

@@ -133,5 +133,15 @@ public:
 	~shark();
 };
 
+class rainbow_serpent : public enemy {
+public:
+	rainbow_serpent();
+	bool charging;
+
+	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
+
+	~rainbow_serpent();
+};
+
 
 #endif
