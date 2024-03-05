@@ -112,6 +112,10 @@ std::string player::attack(moves pattack, enemy *badFellow){
     }
     else if (pattack.effect == "FullHeal") {
         increaseHealth(max_health);
+        if (effect == "NULL") {
+            ailmentShield = true;
+            return "You used " + pattack.name + ", fully restoring your health and granting you a shield against ailments";
+        }
         effect = "NULL";
         return "You used " + pattack.name + ", fully restoring your health and removing all ailments";
     }
@@ -135,7 +139,7 @@ std::string player::attack(moves pattack, enemy *badFellow){
         int tempHealth = badFellow->getHealth();
     	tempHealth = tempHealth - pattack.damage;
     	badFellow->setHealth(tempHealth);
-        if (ailmentShield == true) {
+        if (ailmentShield == true && badFellow->health > 0) {
             ailmentShield = false;
             return "You used " + pattack.name + ", dealing a whopping " + std::to_string(pattack.damage) + " damage. Your ailment shield prevents you from getting tired and gets used up";
         }
@@ -295,8 +299,8 @@ void player::checkDeath() {
 
 std::string player::use_item(items pitem) {
     if (pitem.name == "Yam") {increaseHealth(60); lose_item(pitem.name); return "You ate the Yam. It healed you for 60 health";}
-    else if (pitem.name == "Brush Berry") {increaseSpirit(50); lose_item(pitem.name); return "You ate the Brush Berry. It restored your spirit by 50";}
-    else if (pitem.name == "Bush Tomato") {updateMaxHealth(10); increaseHealth(10); lose_item(pitem.name); return "You ate the Bush Tomato. Your max health increased by 10";}
+    else if (pitem.name == "Brush Berry") {increaseSpirit(max_spirit); lose_item(pitem.name); return "You ate the Brush Berry. It fully restored your spirit";}
+    else if (pitem.name == "Bush Tomato") {updateMaxHealth(15); increaseHealth(15); lose_item(pitem.name); return "You ate the Bush Tomato. Your max health increased by 15";}
     else if (pitem.name == "Desert Lime") {updateMaxSpirit(10); increaseSpirit(10); lose_item(pitem.name); return "You ate the Desert Lime. Your max spirit increased by 10";}
     else if (pitem.name == "Wild Orange") { if (effect == "NULL") {ailmentShield = true; increaseHealth(30); lose_item(pitem.name); return "You ate the Wild Orange. You are shielded against ailments and your health is restored by 30";} else { effect = "NULL"; increaseHealth(30); lose_item(pitem.name); return "You ate the Wild Orange. You were cured of any ailments and healed for 30 health";} }
     else if (pitem.name == "Witchetty Grub") {increaseHealth(150); lose_item(pitem.name); return "You ate the Witchetty Grub. It healed you for 150 health";}

@@ -309,13 +309,13 @@ int game() {
     //Does five damage and burns enemy for 10 damage at the end of each turn
     moves flame_of_wala(100, 5, 20, "Burn", "Flame of Wala");
     //StrongHeal effect heals 80hp
-    moves elder_heal(100, 0, 25, "StrongHeal", "Elder Heal");
+    moves elder_heal(100, 0, 20, "StrongHeal", "Elder Heal");
     //Good spell for damage
     moves nargun_fist(100, 50, 20, "NULL","Nargun's Fist");
     //FullHeal effect heals health to full
     moves rainbow_restoration(100, 0, 50, "FullHeal", "Rainbow Restoration");
     //Big damage spell needs lots of spirit
-    moves wrath_of_wambeen(100, 80, 60, "Burn", "Wambeen's Wrath");
+    moves wrath_of_wambeen(100, 80, 70, "Burn", "Wambeen's Wrath");
 
     // player starts with two moves and a spell learnt
     player.learn_attack("Club");
@@ -351,6 +351,7 @@ int game() {
     bool playerTurn = false;
     bool firstEnemy = true;
     bool insufficientSpirit = false;
+    bool burnDeath = false; //for the case when enemies die from getting burned when attacking twice.
     bool doubleAttack = false; //allows enemy to get burned again if it attacked twice
     //keep track of groups of moves learned so moves don't get learned several times.
     int moveGroup = 0;
@@ -383,6 +384,7 @@ int game() {
 
         //after the first batch of enemies and before the last batch, the enemies will be one of these
         if (player.enemiesDefeated >= 9 && player.enemiesDefeated < 18) {
+            delete enemy;
             brown_snake *bs = new brown_snake();
             blue_ringed_octopus *bro = new blue_ringed_octopus();
             shark *sh = new shark();
@@ -396,6 +398,13 @@ int game() {
             else if (enemies[player.enemiesDefeated] == "Dingo") {enemy = d; delete bs; delete bro; delete sh; delete c; delete wte;}
             else if (enemies[player.enemiesDefeated] == "Crocodile") {enemy = c; delete bs; delete bro; delete sh; delete d; delete wte;}
             else if (enemies[player.enemiesDefeated] == "Wedge-tailed Eagle") {enemy = wte; delete bs; delete bro; delete sh; delete d; delete c;}
+        }
+
+        if (player.enemiesDefeated == numberOfEnemies) {
+            rainbow_serpent *rs = new rainbow_serpent();
+
+            delete enemy;
+            enemy = rs;
         }
 
     }
@@ -427,7 +436,12 @@ int game() {
 
     // first output of UI
     if (encounterMessage == true) {
-        currentMessage = "You encountered a " + enemies[player.enemiesDefeated] + "!";
+        if (enemies[player.enemiesDefeated] == "Rainbow Serpent") {
+            currentMessage = "The mythical Rainbow Serpent appears before you.";
+        }
+        else {
+            currentMessage = "You encountered a " + enemies[player.enemiesDefeated] + "!";
+        }
         hoverAttack(player, *enemy, currentMessage);
         encounterMessage = false;
     }
@@ -635,7 +649,6 @@ int game() {
                                 if (heal.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
                                     insufficientSpirit = true;
-                                    playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(heal, enemy);
                                     player.decreaseSpirit(heal.spiritCost);
@@ -644,7 +657,6 @@ int game() {
                                 if (cleanse.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
                                     insufficientSpirit = true;
-                                    playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(cleanse, enemy);
                                     player.decreaseSpirit(cleanse.spiritCost);
@@ -653,7 +665,6 @@ int game() {
                                 if (flame_of_wala.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
                                     insufficientSpirit = true;
-                                    playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(flame_of_wala, enemy);
                                     player.decreaseSpirit(flame_of_wala.spiritCost);
@@ -663,7 +674,6 @@ int game() {
                                 if (elder_heal.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
                                     insufficientSpirit = true;
-                                    playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(elder_heal, enemy);
                                     player.decreaseSpirit(elder_heal.spiritCost);
@@ -672,7 +682,6 @@ int game() {
                                 if (nargun_fist.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
                                     insufficientSpirit = true;
-                                    playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(nargun_fist, enemy);
                                     player.decreaseSpirit(nargun_fist.spiritCost);
@@ -681,7 +690,6 @@ int game() {
                                 if (rainbow_restoration.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
                                     insufficientSpirit = true;
-                                    playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(rainbow_restoration, enemy);
                                     player.decreaseSpirit(rainbow_restoration.spiritCost);
@@ -690,7 +698,6 @@ int game() {
                                 if (wrath_of_wambeen.spiritCost > player.getSpirit()) {
                                     currentMessage = "Not enough spirit for that move";
                                     insufficientSpirit = true;
-                                    playerTurn = true;
                                 } else {
                                     currentMessage = player.attack(wrath_of_wambeen, enemy);
                                     player.decreaseSpirit(wrath_of_wambeen.spiritCost);
@@ -705,6 +712,7 @@ int game() {
                             }
                             else {
                                 hoverAttack(player, *enemy, currentMessage);
+                                insufficientSpirit = false;
                             }
                         }
                         else if (highlightedOption == player.spells) {
@@ -764,14 +772,15 @@ int game() {
         }
     }
         else if (player.player_turn == false) { // on enemies turn
+            timeout(-1);//turn on blocking read for getch
 
             if (player.effect != "NULL" && effectMessage == true && enemy->health != 0) { // checks if player has a status effect
                     if (player.effect == "poison") {
                         player.decreaseHealth(10);
                         currentMessage = "You're poisoned! You take 10 damage";
                         hoverPause(player, *enemy, currentMessage);
+                        getch(); //wait for player to press something before moving on
                         effectMessage = false;
-                        usleep(1500000);
                     }
                 }
                 if (enemy->effect != "NULL" && enemyEffectMessage == true) { // checks if enemy has a status effect
@@ -782,8 +791,8 @@ int game() {
                         }
                         currentMessage = "The " + enemy->name + " is burnt, and takes 10 damage";
                         hoverPause(player, *enemy, currentMessage);
+                        getch(); //wait for player to press something before moving on
                         enemyEffectMessage = false;
-                        usleep(1500000);
                     }
                 }
 
@@ -795,6 +804,11 @@ int game() {
                 player.effect = "NULL";
                 player.effect2 = "NULL";
                 usleep(1500000);
+                //rs defeated so break
+                if (enemies[player.enemiesDefeated] == "Rainbow Serpent") {
+                    //break out of while loop
+                    break;
+                }
                 if (player.enemiesDefeated < 10) {
                     //ensures Witchetty Grub isn't dropped in the first half of the game
                     rNum2 = rand() % 5;
@@ -835,6 +849,7 @@ int game() {
                 player.player_turn = true;
                 effectMessage = true;
                 enemyEffectMessage = true;
+                timeout(0); //set getch back to non-blocking reads
             }
             else { // enemy doesnt die
                 currentMessage = enemy->attack(&player); // attacks the player
@@ -855,10 +870,24 @@ int game() {
                 //if the enemy is a dingo or if the enemy has a speed boost, it attacks twice
                 if (enemy->name == "Dingo" || enemy->effect2 == "swift") {
                     doubleAttack = true;
-                    enemy->effect2 = "NULL";
                     hoverPause(player, *enemy, currentMessage);
-                    usleep(1500000);
-                    currentMessage = enemy->attack(&player); // attacks the player
+                    getch(); //wait for player to press something before moving on
+                    //enemy moves again so check for burn damage a second time
+                    if (enemy->effect == "burn") {
+                        enemy->health = enemy->health - 10;
+                        if (enemy->health < 1) { // when enemy dies
+                            enemy->health = 0;
+                            burnDeath = true;
+                        }
+                        currentMessage = "The " + enemy->name + " is burnt, and takes 10 damage";
+                        hoverPause(player, *enemy, currentMessage);
+                        getch(); //wait for player to press something before moving on
+                        enemyEffectMessage = false;
+                    }
+                    if (burnDeath == false) {
+                        currentMessage = enemy->attack(&player); // attacks the player
+                    }
+                    enemy->effect2 = "NULL";
                     //Ensure health doesn't display as negative
                     if (player.health < 0) {
                         player.setHealth(0);
@@ -880,33 +909,39 @@ int game() {
                     player.effect2 = "NULL";
                 }
 
-                //enemy moves again so check for burn damage a second time
-                if (doubleAttack == true) {
-                    if (enemy->effect != "NULL") { // checks if enemy has a non-volatile status effect
-                        if (enemy->effect == "burn") {
-                            enemy->health = enemy->health - 10;
-                            if (enemy->health < 1) { // when enemy dies
-                                enemy->health = 0;
-                            }
-                            currentMessage = "The " + enemy->name + " is burnt, and takes 10 damage";
-                            hoverPause(player, *enemy, currentMessage);
-                            enemyEffectMessage = false;
-                            usleep(1500000);
-                        }
-                    }
-                }
-
                 doubleAttack = false;
+                burnDeath = false;
                 player.checkDeath();
                 enemy->checkDeath();
                 player.block = false;
                 player.player_turn = true;
                 effectMessage = true;
                 enemyEffectMessage = true;
+                timeout(0); //set getch back to non-blocking reads
             }
 
         }
     }
+    //if out of the while loop and all enemies are defeated, player wins, else, they're dead
+    if (enemies[player.enemiesDefeated] == "Rainbow Serpent") {
+        timeout(-1);
+        delete[] enemies;
+        clear_terminal();
+
+        std::cout<<"The Rainbow Serpent keels over, it's fierce glare returning to a neutral expression, \r\n       and then eventually one of relief, closing its eyes and going still."<<std::endl;
+        std::cout<<std::endl;
+
+        getch();
+        clear_terminal();
+
+        std::cout<<"Incredible. You restored peace to the outback.\r"<<std::endl;
+        clear_terminal();
+
+        getch();
+        timeout(0);
+        return 0;
+    }
+
     // player dies here
     delete[] enemies;
     usleep(1500000);

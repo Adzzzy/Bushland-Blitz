@@ -92,6 +92,8 @@ public:
 class blue_ringed_octopus : public enemy {
 public:
 	blue_ringed_octopus();
+	bool usedTrap;
+
 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
 
 	~blue_ringed_octopus();
@@ -109,6 +111,7 @@ class crocodile : public enemy {
 public:
 	crocodile();
 	bool charging;
+	bool usedTrap;
 
 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
 
@@ -137,6 +140,9 @@ class rainbow_serpent : public enemy {
 public:
 	rainbow_serpent();
 	bool charging;
+	bool usedTrap;
+	bool strongAttackBreak;
+	bool healed;
 
 	std::string attack(player *player1); // declares the enemies move, polymorphed depending on enemy
 
