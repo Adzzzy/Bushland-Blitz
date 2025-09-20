@@ -1,10 +1,10 @@
 name: Docker Publish to ghcr.io CI
 
-#Whenever something is pushed to the master branch, an image is built and published to ghcr.io
+#Whenever something is pushed to the main branch, an image is built and published to ghcr.io
 #Any pull request resulting in a merge also includes a push and will therefore trigger this as well.
 on:
     push:
-        branches: ["master"]
+        branches: ["main"]
 
 jobs:
     build_and_publish:
