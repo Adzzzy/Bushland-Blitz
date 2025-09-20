@@ -3,41 +3,58 @@ name: Docker Publish to ghcr.io CI
 #Whenever something is pushed to the main branch, an image is built and published to ghcr.io
 #Any pull request resulting in a merge also includes a push and will therefore trigger this as well.
 on:
-    push:
-        branches: ["main"]
+  push:
+    branches: ["main"]
+    #Also run this workflow whenever a new git tag is added that uses semantic versioning syntax
+    tags: [ 'v*.*' ]
+    
+  #May want to also create a new image when a github release is done. 
+  #This isn't necessary because by tagging a release with a proper semver tag, it will trigger the workflow via "on: push: tags: "[ 'v*.*.*' ]"
+  #release:
+    #types: [published]
+
+#The unique tag to use for the docker image will be set as an variable so it may be overwritten if necessary
+env:
+  #By default will use the github.sha context variable as the tag.
+  IMAGETAG: ${{ github.sha }}
+  #github.sha stores a sha related to the commit which started the workflow and is appended on the end of the tag. This provides a way to identify the commit the image belongs to and have different tags for each publish rather than just "latest".
 
 jobs:
-    build_and_publish:
+  build_and_publish:
 
-        runs-on: ubuntu-latest #github runner vm will be based on ubuntu
+    runs-on: ubuntu-latest #github runner vm will be based on ubuntu
 
-        permissions: #give the job permission to view the repo contents and write packages (such as to github container registry)
-            contents: read
-            packages: write
+    permissions: #give the job permission to view the repo contents and write packages (such as to github container registry)
+      contents: read
+      packages: write
 
-        steps:
-            - name: Checkout repository #will clone the repo to the github runner vm performing the action
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository #will clone the repo to the github runner vm performing the action
+        uses: actions/checkout@v4
 
-            - name: Log into GHCR #Log into the github container registry so that images may be pushed
-              #Will use the docker/login-action github action. 
-              #Could also alternatively just run the docker CLI command: docker login
-              uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-              with:
-                registry: ghcr.io
-                username: ${{ github.actor }} #Action context variable that stores the username of the user that triggered the initial workflow run. I.e. whoever pushed to the repo. Could also just put my username directly (Adzzzy)
-                password: ${{ secrets.GITHUB_TOKEN }} #Github actions automatically creates a GITHUB_TOKEN that can be used for authentication within workflows in place of a Personal Access Token (PAT)
+      - name: Log into GHCR #Log into the github container registry so that images may be pushed
+        #Will use the docker/login-action github action. 
+        #Could also alternatively just run the docker CLI command: docker login
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }} #Action context variable that stores the username of the user that triggered the initial workflow run. I.e. whoever pushed to the repo. Could also just put my username directly (Adzzzy)
+          password: ${{ secrets.GITHUB_TOKEN }} #Github actions automatically creates a GITHUB_TOKEN that can be used for authentication within workflows in place of a Personal Access Token (PAT)
+            
+      #If we have a Git tag in semantic versioning format, use this as the tag instead of the commit sha.
+      - name: Use Git Semver as Image Tag
+        if: ${{ startsWith(github.ref_name, 'v*.*') }}
+        run: echo "IMAGETAG=${{github.ref_name}}" >> $GITHUB_ENV #The github.ref_name context variable stores the tag associated with the push (or if there is no tag, the branch name). The if statement ensures it will only be used as the tag if it matches v*.*.* format
 
-            - name: Build and push image
-              run: | #pipe character allows consecutive run commands.
-                docker build . --tag ghcr.io/adzzzy/bushland-blitz:${{ github.sha }} --tag ghcr.io/adzzzy/bushland-blitz:latest
-                docker push ghcr.io/adzzzy/bushland-blitz:${{ github.sha }}
-                docker push ghcr.io/adzzzy/bushland-blitz:latest
-              #The image is first built using the pwd . as context and tagged with <image repo>/<repo owner>/<github repo>
-              #The image repo name followed by the github account name is the format used for ghcr images, while the repo name can be anything, and will just be the github repo name in this case
-              #The github.repository context variable could also be used (stores "Owner/Repo" belonging to current action) but it would need to be converted to lowercase, to be accepted as a tag.
-              #The github.sha context variable stores a sha related to the commit which started the workflow and is appended on the end of the tag. This provides a way to identify the commit the image belongs to and have different tags for each publish rather than just "latest".
-              #The "latest" tag is also added to the image and pushed to ghcr as it is the default tag pulled from the registry even when no tag is specified, allowing a consistent way to pull the image.
+      - name: Build and push image 
+        run: | #pipe character allows consecutive run commands.
+          docker build . --tag ghcr.io/adzzzy/bushland-blitz:${{ env.IMAGETAG }} --tag ghcr.io/adzzzy/bushland-blitz:latest
+          docker push ghcr.io/adzzzy/bushland-blitz:${{ env.IMAGETAG }}
+          docker push ghcr.io/adzzzy/bushland-blitz:latest
+        #The image is first built using the pwd . as context and tagged with <image repo>/<repo owner>/<github repo>
+        #The image repo name followed by the github account name is the format used for ghcr images, while the repo name can be anything, and will just be the github repo name in this case
+        #The github.repository context variable could also be used (stores "Owner/Repo" belonging to current action) but it would need to be converted to lowercase, to be accepted as a tag.    
+        #The "latest" tag is also added to the image and pushed to ghcr as it is the default tag pulled from the registry even when no tag is specified, allowing a consistent way to pull the image.
                 
 
 
