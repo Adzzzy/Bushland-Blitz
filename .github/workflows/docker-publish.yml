@@ -1,9 +1,10 @@
 name: Docker Publish to ghcr.io CI
 
-#Whenever something is pushed to the main branch, an image is built and published to ghcr.io
+#Trigger the workflow on push
 #Any pull request resulting in a merge also includes a push and will therefore trigger this as well.
 on:
   push:
+    #Only run on pushes to main branch as it is the primary branch which would be the least experimental and most up to date
     branches: ["main"]
     #Also run this workflow whenever a new git tag is added that uses semantic versioning syntax
     tags: [ 'v*.*' ]
@@ -42,9 +43,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }} #Github actions automatically creates a GITHUB_TOKEN that can be used for authentication within workflows in place of a Personal Access Token (PAT)
             
       #If we have a Git tag in semantic versioning format, use this as the tag instead of the commit sha.
-      - name: Use Git Semver as Image Tag
-        if: ${{ startsWith(github.ref_name, 'v*.*') }}
-        run: echo "IMAGETAG=${{github.ref_name}}" >> $GITHUB_ENV #The github.ref_name context variable stores the tag associated with the push (or if there is no tag, the branch name). The if statement ensures it will only be used as the tag if it matches v*.*.* format
+      - name: Use Git Semver as Image Tag #if statements in github actions don't support wildcards or regexp, therefore checking if tag starts with v will be sufficient (otherwise you can use "run" first for a shell and use regexp there and then pass the output to if)
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        run: echo "IMAGETAG=${{github.ref_name}}" >> $GITHUB_ENV #The github.ref_name context variable stores the tag associated with the push (or if there is no tag, the branch name). The if statement ensures it will only be used as the tag if it starts with v
 
       - name: Build and push image 
         run: | #pipe character allows consecutive run commands.
