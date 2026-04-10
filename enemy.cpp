@@ -1039,7 +1039,7 @@ std::string rainbow_serpent::attack(player *player1) {
 	//no multiplier for rainbow serpent, will have its own base damages
 
 	//one-off heal
-	if (health <= 75) {
+	if (health <= 75 && !charging) {
 		//if serpent strike or death grip is chosen, heal instead
 		if (rNum2 == 1 || rNum2 == 2) {
 			if (healed == false) {

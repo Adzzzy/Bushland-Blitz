@@ -6,6 +6,39 @@
 #include <unistd.h>
 #include "player.h"
 
+//For BushDex
+bool seenCleanse = false;
+bool seenSpear = false;
+bool seenWala = false;
+bool seenAxe = false;
+bool seenElder = false;
+bool seenNargun = false;
+bool seenGambit = false;
+bool seenRainbowR = false;
+bool seenHefty = false;
+bool seenWambeen = false;
+
+bool seenYam = false;
+bool seenBrush = false;
+bool seenTomato = false;
+bool seenLime = false;
+bool seenOrange = false;
+bool seenGrub = false;
+
+bool seenGSnake = false;
+bool seenEchidna = false;
+bool seenKangaroo = false;
+bool seenScorpion = false;
+bool seenSpider = false;
+bool seenKoala = false;
+bool seenBSnake = false;
+bool seenBROctopus = false;
+bool seenShark = false;
+bool seenDingo = false;
+bool seenCrocodile = false;
+bool seenWTEagle = false;
+bool seenRSerpent = false;
+
 extern void clear_terminal();
 void hoverAttack(player &player, enemy &enemy, std::string currentMessage) {
     clear_terminal();
@@ -302,7 +335,7 @@ int game() {
 
 
     // spells (Arranged in the order that they are obtained)
-    //WeakHeal effect heals 25hp
+    //WeakHeal effect heals 30hp
     moves heal(100, 0, 10, "WeakHeal", "Heal");
     //Cleanse gets rid of poison status (and others if they are added)
     moves cleanse(100, 0, 10, "Cleanse", "Cleanse");
@@ -356,6 +389,7 @@ int game() {
     //keep track of groups of moves learned so moves don't get learned several times.
     int moveGroup = 0;
 
+    bool serpentDefeated = false; //bool to determine if the win message should be displayed at the end of the game
 
     // while loop of entire game
     while(player.player_death == false) {
@@ -374,12 +408,12 @@ int game() {
             spider *sp = new spider();
             koala *ko = new koala();
 
-            if (enemies[player.enemiesDefeated] == "Green Snake") {enemy = gs; delete e; delete ka; delete sc; delete sp; delete ko;}
-            else if (enemies[player.enemiesDefeated] == "Echidna") {enemy = e; delete gs; delete ka; delete sc; delete sp; delete ko;}
-            else if (enemies[player.enemiesDefeated] == "Kangaroo") {enemy = ka; delete gs; delete e; delete sc; delete sp; delete ko;}
-            else if (enemies[player.enemiesDefeated] == "Scorpion") {enemy = sc; delete gs; delete e; delete ka; delete sp; delete ko;}
-            else if (enemies[player.enemiesDefeated] == "Spider") {enemy = sp; delete gs; delete e; delete ka; delete sc; delete ko;}
-            else if (enemies[player.enemiesDefeated] == "Koala") {enemy = ko; delete gs; delete e; delete ka; delete sc; delete sp;}
+            if (enemies[player.enemiesDefeated] == "Green Snake") {enemy = gs; delete e; delete ka; delete sc; delete sp; delete ko; seenGSnake = true;}
+            else if (enemies[player.enemiesDefeated] == "Echidna") {enemy = e; delete gs; delete ka; delete sc; delete sp; delete ko; seenEchidna = true;}
+            else if (enemies[player.enemiesDefeated] == "Kangaroo") {enemy = ka; delete gs; delete e; delete sc; delete sp; delete ko; seenKangaroo = true;}
+            else if (enemies[player.enemiesDefeated] == "Scorpion") {enemy = sc; delete gs; delete e; delete ka; delete sp; delete ko; seenScorpion = true;}
+            else if (enemies[player.enemiesDefeated] == "Spider") {enemy = sp; delete gs; delete e; delete ka; delete sc; delete ko; seenSpider = true;}
+            else if (enemies[player.enemiesDefeated] == "Koala") {enemy = ko; delete gs; delete e; delete ka; delete sc; delete sp; seenKoala = true;}
         }
 
         //after the first batch of enemies and before the last batch, the enemies will be one of these
@@ -392,12 +426,12 @@ int game() {
             crocodile *c = new crocodile();
             wedge_tailed_eagle *wte = new wedge_tailed_eagle();
 
-            if (enemies[player.enemiesDefeated] == "Brown Snake") {enemy = bs; delete bro; delete sh; delete d; delete c; delete wte;}
-            else if (enemies[player.enemiesDefeated] == "Blue-ringed Octopus") {enemy = bro; delete bs; delete sh; delete d; delete c; delete wte;}
-            else if (enemies[player.enemiesDefeated] == "Shark") {enemy = sh; delete bs; delete  bro; delete d; delete c; delete wte;} 
-            else if (enemies[player.enemiesDefeated] == "Dingo") {enemy = d; delete bs; delete bro; delete sh; delete c; delete wte;}
-            else if (enemies[player.enemiesDefeated] == "Crocodile") {enemy = c; delete bs; delete bro; delete sh; delete d; delete wte;}
-            else if (enemies[player.enemiesDefeated] == "Wedge-tailed Eagle") {enemy = wte; delete bs; delete bro; delete sh; delete d; delete c;}
+            if (enemies[player.enemiesDefeated] == "Brown Snake") {enemy = bs; delete bro; delete sh; delete d; delete c; delete wte; seenBSnake = true;}
+            else if (enemies[player.enemiesDefeated] == "Blue-ringed Octopus") {enemy = bro; delete bs; delete sh; delete d; delete c; delete wte; seenBROctopus = true;}
+            else if (enemies[player.enemiesDefeated] == "Shark") {enemy = sh; delete bs; delete  bro; delete d; delete c; delete wte; seenShark = true;} 
+            else if (enemies[player.enemiesDefeated] == "Dingo") {enemy = d; delete bs; delete bro; delete sh; delete c; delete wte; seenDingo = true;}
+            else if (enemies[player.enemiesDefeated] == "Crocodile") {enemy = c; delete bs; delete bro; delete sh; delete d; delete wte; seenCrocodile = true;}
+            else if (enemies[player.enemiesDefeated] == "Wedge-tailed Eagle") {enemy = wte; delete bs; delete bro; delete sh; delete d; delete c; seenWTEagle = true;}
         }
 
         if (player.enemiesDefeated == numberOfEnemies) {
@@ -405,6 +439,8 @@ int game() {
 
             delete enemy;
             enemy = rs;
+
+            seenRSerpent = true;
         }
 
     }
@@ -414,24 +450,34 @@ int game() {
         player.learn_spell("Cleanse");
         player.learn_attack("Spear Hurl");
         moveGroup++;
+        seenCleanse = true; //For BushDex
+        seenSpear = true;
     } else if (player.enemiesDefeated == 6 && moveGroup == 1) {
         player.learn_spell("Flame of Wala");
         player.learn_attack("Axe Swipe");
         moveGroup++;
+        seenWala = true;
+        seenAxe = true;
     } else if (player.enemiesDefeated == 9 && moveGroup == 2) {
         player.learn_spell("Elder Heal");
         moveGroup++;
+        seenElder = true;
     } else if (player.enemiesDefeated == 12 && moveGroup == 3) {
         player.learn_spell("Nargun's Fist");
         player.learn_attack("Gnarly Gambit");
         moveGroup++;
+        seenNargun = true;
+        seenGambit = true;
     } else if (player.enemiesDefeated == 15 && moveGroup == 4) {
         player.learn_spell("Rainbow Restoration");
         player.learn_attack("Hefty Club");
         moveGroup++;
+        seenRainbowR = true;
+        seenHefty = true;
     } else if (player.enemiesDefeated == 17 && moveGroup == 5) {
         player.learn_spell("Wambeen's Wrath");
         moveGroup++;
+        seenWambeen = true;
     }
 
     // first output of UI
@@ -732,21 +778,27 @@ int game() {
                         if (highlightedOption < player.item) {
                             if (player.gained_items[highlightedOption] == "Yam") {
                                 currentMessage = player.use_item(yam);
+                                seenYam = true; //for bushdex
                                 if (enemy->health < 1) { enemy->health = 0; }
                             } else if (player.gained_items[highlightedOption] == "Brush Berry") {
                                 currentMessage = player.use_item(brush_berry);
+                                seenBrush = true;
                                 if (enemy->health < 1) { enemy->health = 0; }
                             } else if (player.gained_items[highlightedOption] == "Bush Tomato") {
                                 currentMessage = player.use_item(bush_tomato);
+                                seenTomato = true;
                                 if (enemy->health < 1) { enemy->health = 0; }
                             } else if (player.gained_items[highlightedOption] == "Desert Lime") {
                                 currentMessage = player.use_item(desert_lime);
+                                seenLime = true;
                                 if (enemy->health < 1) { enemy->health = 0; }
                             } else if (player.gained_items[highlightedOption] == "Wild Orange") {
                                 currentMessage = player.use_item(wild_orange);
+                                seenOrange = true;
                                 if (enemy->health < 1) { enemy->health = 0; }
                             } else if (player.gained_items[highlightedOption] == "Witchetty Grub") {
                                 currentMessage = player.use_item(witchetty_grub);
+                                seenGrub = true;
                                 if (enemy->health < 1) { enemy->health = 0; }
                             }
                             highlightedOption = 1;
@@ -806,6 +858,7 @@ int game() {
                 usleep(1500000);
                 //rs defeated so break
                 if (enemies[player.enemiesDefeated] == "Rainbow Serpent") {
+                    serpentDefeated = true; //bool set to true to indicate beating the serpent
                     //break out of while loop
                     break;
                 }
@@ -850,6 +903,7 @@ int game() {
                 effectMessage = true;
                 enemyEffectMessage = true;
                 timeout(0); //set getch back to non-blocking reads
+                flushinp(); //flush characters out of the buffer so that player input done while waiting doesn't affect the next screen
             }
             else { // enemy doesnt die
                 currentMessage = enemy->attack(&player); // attacks the player
@@ -923,22 +977,41 @@ int game() {
         }
     }
     //if out of the while loop and all enemies are defeated, player wins, else, they're dead
-    if (enemies[player.enemiesDefeated] == "Rainbow Serpent") {
+    if (serpentDefeated) {
         timeout(-1);
         delete[] enemies;
         clear_terminal();
-
-        std::cout<<"The Rainbow Serpent keels over, it's fierce glare returning to a neutral expression, \r\n       and then eventually one of relief, closing its eyes and going still."<<std::endl;
+        std::cout<< "Rainbow Serpent  Enemy Health: 0\r" <<std::endl;
         std::cout<<std::endl;
+        std::cout<<std::endl;
+        std::cout<<std::endl;
+        std::cout<< ".\r" <<std::endl;
+        getch();
+        clear_terminal();
+
+        std::cout<< "....\r" <<std::endl;
+        getch();
+        clear_terminal();
+
+        std::cout<<"The Rainbow Serpent keels over, its fierce glare returning to a neutral expression, \r" << std::endl;
 
         getch();
         clear_terminal();
 
-        std::cout<<"Incredible. You restored peace to the outback.\r"<<std::endl;
+        std::cout<<"and then, eventually, one of relief, closing its eyes and going still.\r"<<std::endl;
+
+        getch();
         clear_terminal();
+
+        std::cout<<"Incredible..\r"<<std::endl;
+        getch();
+        clear_terminal();
+
+        std::cout<<"The Outback has been changed forever.\r"<<std::endl;
 
         getch();
         timeout(0);
+        clear_terminal();
         return 0;
     }
 
@@ -949,6 +1022,7 @@ int game() {
     std::cout << " You died! \r" << std::endl;
     usleep(1500000);
     clear_terminal();
+    flushinp(); //flush characters out of the buffer so that player input done while waiting doesn't affect the next screen
     return 0;
 
 }
